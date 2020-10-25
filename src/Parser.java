@@ -27,9 +27,13 @@ public class Parser {
     public static Article article = new Article();
     public static ArrayList<String> categoryString;
     public static ArrayList<Integer> categoryInteger;
+    public static ArrayList<Integer> categoryInfoboxInteger;
+    public static ArrayList<Integer> categoryAbstractInteger;
+    public static ArrayList<Integer> categoryArticleInteger;
 
     final static boolean keepRedirects = false;
     public static boolean isReference = false;
+    public static final int TRESHOLD = 30;
     public static int totalMatches = 0;
     public static int totalMatchesInfobox = 0;
     public static int totalMatchesAbstract = 0;
@@ -58,7 +62,7 @@ public class Parser {
         return categoriesArray;
     }
 
-    public static void find_category_keyword(JSONArray categoriesArray, String line) {
+    public static void find_category_keyword(JSONArray categoriesArray, String line, String partOfText) {
         Pattern pattern;
         Matcher matcher;
 
@@ -88,9 +92,19 @@ public class Parser {
                     pattern = Pattern.compile("(" + key + ")");
                     matcher = pattern.matcher(string);
 
-                    //if there is correct one set title of page
-
                     while (matcher.find()) {
+                        if( partOfText == "infobox"){
+                            categoriesInfobox[index]++;
+                            totalMatchesInfobox++;
+                        }
+                        if( partOfText == "abstract"){
+                            categoriesAbstract[index]++;
+                            totalMatchesAbstract++;
+                        }
+                        if( partOfText == "article"){
+                            categoriesArticle[index]++;
+                            totalMatchesArticle++;
+                        }
                         categoriesCount[index]++;
                         totalMatches++;
 
@@ -128,27 +142,26 @@ public class Parser {
                     categoryInteger.add(categoriesCount[i]);
                     newTotal += categoriesCount[i];
                 }
-                System.out.println(categoriesNames[i] + " - " + percent + "% - (" + categoriesCount[i] + ") matches");
+                System.out.println("\t" + categoriesNames[i] + " - " + percent + "% - (" + categoriesCount[i] + ") matches");
             }
         }
         System.out.println("TOTAL MATCHES: " + totalMatches);
-        System.out.println("----result----");
-
+        System.out.println("----------");
         for (int i = 0; i < categoryInteger.size(); i++){
             percent = (float) categoryInteger.get(i) / (float) newTotal * 100;
             System.out.println(categoryString.get(i) + " - " + percent + "%");
         }
+        System.out.println("----------");
         totalMatches = 0;
         categoriesCount = new int[numberOfCategories];
-        System.out.println("--------------");
     }
 
-    public static void skip_reference(String line, BufferedReader bufReader, JSONArray categoriesArray) throws IOException {
+    public static void skip_reference(String line, BufferedReader bufReader, JSONArray categoriesArray, String partOfText) throws IOException {
         while (!line.matches(".*&lt;/ref&gt;.*")) {
             line = bufReader.readLine();
         }
         isReference = false;
-        find_category_keyword(categoriesArray, line);
+        find_category_keyword(categoriesArray, line, partOfText);
     }
 
 
@@ -187,7 +200,6 @@ public class Parser {
                                 line = bufReader.readLine();
                             }
                             inPage = false;
-                            continue;
                         } else {
                             //every correct title that matches the regex
                             if (line.matches(TITLE)) {
@@ -196,6 +208,7 @@ public class Parser {
 
                                 //if there is correct one set title of page
                                 article.setTitle((matcher.find() ? matcher.group(1) : "Unknown Title"));
+                                System.out.println("NAME: " + article.getTitle());
 
                                 //skips metadata until text tag
                                 while (!line.matches(TEXT)) {
@@ -206,6 +219,7 @@ public class Parser {
                                 }
                                 line = line.replaceAll("(.*<.*text.*>)", "");
 
+
                                 while (!line.matches(PAGE_END)) {
 
                                     if (line.matches(INFOBOX) || line.matches(GEOBOX)){
@@ -213,44 +227,62 @@ public class Parser {
                                         matcher = pattern.matcher(line);
                                         if (article.getMainCategory() == null) {
                                             article.setMainCategory((matcher.find() ? matcher.group(2) : "Unknown"));
+                                            System.out.println("INFOBOX CATEGORY: " + article.getMainCategory());
+                                            System.out.println("----------");
                                         }
 
                                         while (!line.matches(ENDBOX)) {
-                                            find_category_keyword(categoriesArray, line);
+                                            find_category_keyword(categoriesArray, line, "infobox");
                                             if (isReference) {
-                                                skip_reference(line, bufReader, categoriesArray);
+                                                skip_reference(line, bufReader, categoriesArray, "infobox");
                                             }
                                             line = bufReader.readLine();
                                         }
+                                        if (totalMatches != 0) {
+                                            System.out.println("INFOBOX:");
+                                            select_category();
+                                        }
                                     }
                                     if (line.matches(ABSTRACT)) {
+
+
+
                                         if (article.getMainCategory() == null) {
                                             article.setMainCategory("Neznáma kategória");
                                         }
                                         while (!line.matches(ARTICLE) && !line.matches(PAGE_END)) {
-                                            find_category_keyword(categoriesArray, line);
+                                            find_category_keyword(categoriesArray, line, "abstract");
                                             if (isReference) {
-                                                skip_reference(line, bufReader, categoriesArray);
+                                                skip_reference(line, bufReader, categoriesArray, "abstract");
                                             }
                                             line = bufReader.readLine();
                                         }
+                                        if (totalMatches != 0) {
+                                            System.out.println("ABSTRACT:");
+                                            select_category();
+                                        }
                                     }
                                     if (line.matches(ARTICLE)) {
+
                                         while (!line.matches(PAGE_END)) {
-                                            //find_category(categoriesArray, line);
+                                            find_category_keyword(categoriesArray, line, "article");
+                                            if (isReference) {
+                                                skip_reference(line, bufReader, categoriesArray, "article");
+                                            }
                                             line = bufReader.readLine();
+                                        }
+                                        if (totalMatches != 0) {
+                                            System.out.println("ARTICLE:");
+                                            select_category();
                                         }
                                     }
                                     if (line.matches(PAGE_END)) {
+
                                         inPage = false;
-                                        System.out.println("NAME: " + article.getTitle());
-                                        System.out.println("INFOBOX CATEGORY: " + article.getMainCategory());
-                                        select_category();
                                         article.setTitle(null);
                                         article.setMainCategory(null);
                                         continue;
                                     }
-
                                     line = bufReader.readLine();
                                 }
                             }
