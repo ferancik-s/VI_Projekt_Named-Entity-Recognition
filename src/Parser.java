@@ -27,17 +27,12 @@ public class Parser {
     public static Article article = new Article();
     public static ArrayList<String> categoryString;
     public static ArrayList<Integer> categoryInteger;
-    public static ArrayList<Integer> categoryInfoboxInteger;
-    public static ArrayList<Integer> categoryAbstractInteger;
-    public static ArrayList<Integer> categoryArticleInteger;
 
     final static boolean keepRedirects = false;
     public static boolean isReference = false;
-    public static final int TRESHOLD = 30;
+    public static final float TRESHOLD = 100/3;
     public static int totalMatches = 0;
-    public static int totalMatchesInfobox = 0;
-    public static int totalMatchesAbstract = 0;
-    public static int totalMatchesArticle = 0;
+
 
 
     final static int numberOfCategories = 14;
@@ -71,7 +66,7 @@ public class Parser {
         String string = line.toLowerCase();
         string = string.replaceAll("", "");
         if (!keepRedirects){
-            string = string.replaceAll("[\\[]{2}([A-zÀ-ž0-9\\s(),.:!?#]*)[|]+", "");
+            string = string.replaceAll("[\\[]{2}([A-Za-zÇ-Ž0-9\\s(),.:!?#]*)[|]+", "");
         }
         if (string.matches(".*(&lt;ref(\\s*name\\s*=\\s*&quot.*&quot;\\s*)?&gt;.*&lt;/ref&gt;).*")) {
             string = string.replaceAll("(&lt;ref(\\s*name\\s*=\\s*&quot.*&quot;\\s*)?&gt;.*?&lt;/ref&gt;)", "");
@@ -93,25 +88,13 @@ public class Parser {
                     matcher = pattern.matcher(string);
 
                     while (matcher.find()) {
-                        if( partOfText == "infobox"){
-                            categoriesInfobox[index]++;
-                            totalMatchesInfobox++;
-                        }
-                        if( partOfText == "abstract"){
-                            categoriesAbstract[index]++;
-                            totalMatchesAbstract++;
-                        }
-                        if( partOfText == "article"){
-                            categoriesArticle[index]++;
-                            totalMatchesArticle++;
-                        }
                         categoriesCount[index]++;
                         totalMatches++;
 
-                        /*System.out.println("LINE:\t\t" + string);
-                        System.out.println("GUESS:\t\t" + category.get("name"));
-                        System.out.println("KEY WORD:\t" + key);
-                        System.out.println("---");*/
+                        //System.out.println("LINE:\t\t" + string);
+                        //System.out.println("GUESS:\t\t" + category.get("name"));
+                        //System.out.println("KEY WORD:\t" + key);
+                        //System.out.println("---");
 
                     }
                     /*
@@ -137,7 +120,7 @@ public class Parser {
         for (int i = 0; i < numberOfCategories; i++){
             if (categoriesCount[i] != 0){
                 percent = (float) categoriesCount[i] / (float) totalMatches * 100;
-                if(percent > 30) {
+                if(percent > TRESHOLD) {
                     categoryString.add(categoriesNames[i]);
                     categoryInteger.add(categoriesCount[i]);
                     newTotal += categoriesCount[i];
@@ -145,13 +128,13 @@ public class Parser {
                 System.out.println("\t" + categoriesNames[i] + " - " + percent + "% - (" + categoriesCount[i] + ") matches");
             }
         }
-        System.out.println("TOTAL MATCHES: " + totalMatches);
-        System.out.println("----------");
+        System.out.println("\tTOTAL MATCHES: " + totalMatches);
+        System.out.println("\t----------");
         for (int i = 0; i < categoryInteger.size(); i++){
             percent = (float) categoryInteger.get(i) / (float) newTotal * 100;
-            System.out.println(categoryString.get(i) + " - " + percent + "%");
+            System.out.println("\t" + categoryString.get(i) + " - " + percent + "%");
         }
-        System.out.println("----------");
+        System.out.println("\t----------");
         totalMatches = 0;
         categoriesCount = new int[numberOfCategories];
     }
@@ -206,10 +189,6 @@ public class Parser {
                                 pattern = Pattern.compile(TITLE);
                                 matcher = pattern.matcher(line);
 
-                                //if there is correct one set title of page
-                                article.setTitle((matcher.find() ? matcher.group(1) : "Unknown Title"));
-                                System.out.println("NAME: " + article.getTitle());
-
                                 //skips metadata until text tag
                                 while (!line.matches(TEXT)) {
                                     line = bufReader.readLine();
@@ -217,13 +196,17 @@ public class Parser {
                                 if (line.matches(".*<text.*>#(REDIRECT|redirect).*</text>.*")) {
                                     continue;
                                 }
-                                line = line.replaceAll("(.*<.*text.*>)", "");
 
+                                //if there is correct one set title of page
+                                article.setTitle((matcher.find() ? matcher.group(1) : "Unknown Title"));
+                                System.out.println("NAME: " + article.getTitle());
+
+                                line = line.replaceAll("(.*<.*text.*>)", "");
 
                                 while (!line.matches(PAGE_END)) {
 
                                     if (line.matches(INFOBOX) || line.matches(GEOBOX)){
-                                        pattern = Pattern.compile(".*\\{\\{(Infobox|Geobox)\\s*(.*)");
+                                        pattern = Pattern.compile(".*\\{\\{(Infobox|Geobox)\\s*([A-Za-zÇ-Ž0-9,.:()!?-_'\"]*)(|)?");
                                         matcher = pattern.matcher(line);
                                         if (article.getMainCategory() == null) {
                                             article.setMainCategory((matcher.find() ? matcher.group(2) : "Unknown"));
@@ -239,13 +222,15 @@ public class Parser {
                                             line = bufReader.readLine();
                                         }
                                         if (totalMatches != 0) {
-                                            System.out.println("INFOBOX:");
-                                            select_category();
+                                            bufReader.mark(2500);
+                                            if (!bufReader.readLine().matches(".*\\{\\{Infobox.*")) {
+                                                System.out.println("INFOBOX:");
+                                                select_category();
+                                            }
+                                            bufReader.reset();
                                         }
                                     }
                                     if (line.matches(ABSTRACT)) {
-
-
 
                                         if (article.getMainCategory() == null) {
                                             article.setMainCategory("Neznáma kategória");
