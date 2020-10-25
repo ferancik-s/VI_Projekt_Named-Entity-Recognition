@@ -3,28 +3,28 @@
         "name": "person",
         "key_words": [
             "bydlisko",
-            "dieta", "dcera",
-            "meno", "muz", "matka", "manzelka", "manzel",
-            "narodeni", "narodil",
-            "osobnost", "osoba", "otec", "odisiel",
-            "pribuzni", "pracoval", "pracovala", "predstavitel", "posobil", "profesor",
-            "rodic",
-            "syn", "surodenci", "studoval", "studovala",
-            "umrti",
-            "vytvoril",
-            "zena", "zomrel"
+            "dieťa", "dcéra",
+            "meno", "mená", "muž", "matka", "manželka", "manžel",
+            "narodeniny", "narodený", "narodená", "narodil", "narodila", "narodenie", "narodenia",
+            "osobnost", "osoba", "osoby", "otec", "odišiel",
+            "príbuzní", "pracoval", "pracovala", "predstaviteľ", "predstaviteľka", "pôsobil", "pôsobila", "profesor", "profesofka", "postava", "postáv",
+            "rodič", "rodičia",
+            "syn", "súrodenci", "súrodenec", "študoval", "študovala",
+            "úmrtie", "umrel", "umrela", "úmrtia",
+            "vytvoril", "vytvorila",
+            "žena", "zomrel", "zomrela", "zamestnanie", "zakladateľ", "zakladateľka"
         ],
         "subcategory": [
             {
                 "name": "male",
                 "key_words": [
-                    "on", "narodil", "zomrel", "pracoval", "studoval"
+                   "narodil", "zomrel", "pracoval", "studoval"
                 ]
             },
             {
                 "name": "female",
                 "key_words": [
-                    "ona", "narodila", "zomrela", "studovala"
+                    "narodila", "zomrela", "studovala"
                 ]
             }
         ]
@@ -32,12 +32,17 @@
     {
         "name": "facility",
         "key_words": [
-            "budova",
-            "mrakodrap", "material",
-            "postavili", "postavena", "postavene", "postaveny", "poschodi", "podlazi",
-            "stavba",
-            "ulica",
-            "vystavba"
+            "budova", "budovu", "budovy",
+            "cesta", "cestné", "cestná",
+            "diaľnica", "diaľnice", "dráha", "dráhy",
+            "križovatka", "križovatky",
+            "letisko", "letiská", "letísk",
+            "mrakodrap", "mrakodrapy", "mrakodrapov", "materiál", "materiály", "most", "mosty",
+            "postavili", "postavená", "postavené", "postavený", "poschodí", "poschodie", "poschodia","podlaží", "podlažie", "podlažia",
+            "terminál", "tunel", "tunely",
+            "ulica", "ulice", "ulici",
+            "výstavba", "výjazd",
+            "železnica", "železnice"
         ],
         "subcategory": [
             {
@@ -69,13 +74,13 @@
     {
         "name": "norp",
         "key_words": [
-            "etnic",
-            "mensin",
-            "narod", "nabozen",
-            "obcan", "obcania",
-            "prislusni",
-            "skupin",
-            "vyznavac", "vyznavanie", "vyznavat", "vyznava"
+            "etnická", "etnické",
+            "menšina", "menšiny", "menšinu",
+            "národ", "náboženstvo", "náboženstvá", "nábožensky", "náboženské", "náboženstiev",
+            "občan", "občania", "občianstvo",
+            "príslušník", "príslušnosť",
+            "skupín", "skupina", "skupiny",
+            "vyznávač", "vyznávačka", "vyznávanie", "vyznávajú", "vyznávať", "vyznáva", "viera", "viery"
         ],
         "subcategory": [
             {
@@ -102,10 +107,11 @@
     {
         "name": "organization",
         "key_words": [
-            "organizacia",
-            "spolocnost", "sidlo",
-            "vedenie",
-            "zalozeny", "zalozena", "zakladatel", "zisk"
+            "organizácia", "organizácie",
+            "spoločnosť", "sídlo",
+            "tržby", "tržba", "tržbu",
+            "vedenie", "výroba", "vyrába","produkcia", "produkuje", "vývoj", "vyvíja",
+            "založený", "založená", "zakladateľ", "zisk"
         ],
         "subcategory": [
             {
@@ -125,15 +131,15 @@
     {
         "name": "geographical",
         "key_words": [
-            "geograf",
-            "hranic",
-            "kraj",
-            "mesto",
-            "okres", "obyvatel",
-            "region", "rozloha", "republika",
-            "stat", "svet",
-            "uzemi",
-            "vlajka",
+            "geografický", "geografická", "geografickú",
+            "hranica", "hraničný", "hranice", "hranicou",
+            "kraj",  "krajské", "krajská", "krajskú", "krajina", "krajiny", "krajinou", "krajinu",
+            "mesto", "mestá", "mestom",
+            "okres", "okresy", "obyvateľov", "obyvatelia", "obec", "obce",
+            "región", "regióny", "regióne", "rozloha", "republika",
+            "štát", "štáty", "štátov", "štátny", "štátna", "svet",
+            "územie", "územia",
+            "vlajka", "vlajky",
             "znak"
         ],
         "subcategory": [
@@ -160,10 +166,10 @@
     {
         "name": "location",
         "key_words": [
-            "hory", "hora", "horsky",
+            "hory", "hora", "horský", "horská", "horské",
             "kopce", "kopec",
-            "pohorie",
-            "rieka"
+            "pohorie", "pohoria", "pohorí",
+            "rieka", "rieky"
         ],
         "subcategory": [
             {
@@ -183,7 +189,13 @@
     {
         "name": "product",
         "key_words": [
-
+            "auto", "autá",
+            "bicykel", "bicykle",
+            "lietadlo", "lietadlá",
+            "motorka", "motorky",
+            "objekt",
+            "produkt",
+            "vozidlo", "vozidlá", "vrtulník", "vrtulníky"
         ],
         "subcategory": [
             {
@@ -209,7 +221,11 @@
     {
         "name": "event",
         "key_words": [
-
+            "event",
+            "koncert", "koncerty",
+            "olympiáda", "olympijské",
+            "udalosť", "udalosti",
+            "vojna", "vojnu", "vojne"
         ],
         "subcategory": [
             {
@@ -236,18 +252,18 @@
         "name": "art",
         "key_words": [
             "artist",
-            "dielo", "diel",
-            "farba", "film",
-            "hudba",
-            "knih", "kniz",
-            "literatur", "literarn",
-            "melodia",
-            "pismo", "publikov", "publikaci",
-            "rytmus",
-            "serial", "sitkom", "sitcom",
-            "tvorba", "text",
-            "umelec", "umenie",
-            "zaner"
+            "dielo", "diel", "diela",
+            "farba", "farby", "film", "filmy",
+            "hudba", "hudobný", "hudobná",
+            "kniha", "knihy", "kníh", "knižka", "knižky", "knižný", "knižná", "knižné",
+            "literatúra", "literárna", "literárne", "literárny",
+            "melódia", "muzika", "muzikál", "muzikálny", "muzikálny", "muzický", "muzická",
+            "publikácia", "publikácie", "publikáciu", "publikovaný", "publikovaná", "publikované", "publikovanú", "príbeh", "príbehy",
+            "rytmus", "rytmický",
+            "seriál", "sitkom", "sitcom",
+            "tvorba", "text", "téma", "témy", "témou",
+            "umelec", "umelkyňa", "umelecké", "umelecký", "umelecká", "umenie", "umenia",
+            "žáner", "žánre", "žánru"
         ],
         "subcategory": [
             {
@@ -273,19 +289,26 @@
     {
         "name": "language",
         "key_words": [
-            "[a-Ž]+stina", "[a-Ž]+cina", "[a-Ž]+ctina",
-            "hovoria",
-            "jazyk",
-            "komunikacia",
-            "morfema",
-            "pismo",
-            "slovo", "slova", "syntax"
+            "azbuka",
+            "cyrilika",
+            "dorozumievať", "dorozumieť", "dorozumievajú", "dorozumieva",
+            "hovoria", "hovorený", "hovoriacich", "hovoriaci",
+            "jazyk", "jazyky", "jazykov",
+            "komunikácia", "komunikácii",
+            "latinka",
+            "morféma",
+            "písmo(deleted)",
+            "slovo", "slová", "slovný", "slovná", "slovné", "syntax",
+            "úradný"
         ]
     },
     {
         "name": "organism",
         "key_words": [
-
+            "hmyz", "huba", "huby", "hríb", "hríby",
+            "kvet", "kvety",
+            "rastlina", "rastliny", "rastlinné",
+            "zviera", "zver", "zvieratá", "zvierat"
         ],
         "subcategory": [
             {
@@ -317,17 +340,16 @@
     {
         "name": "science",
         "key_words": [
-            "[a-Ž]+logia",
-            "astronomia",
-            "biologia", "bio",
-            "chemia",
-            "disciplin",
+            "[a-Ž]+lógia",
+            "astronómia",
+            "biológia", "bio",
+            "chémia",
             "fyzika", "filozofia",
-            "matematika", "metria",
-            "odbor",
+            "matematika", "[a-Ž]+metria",
+            "odbor", "odbory",
             "poznanie",
-            "science", "skuma", "studia",
-            "veda", "vedu", "vied", "vedeck", "vyskum"
+            "science", "skúma", "skúmané","štúdia", "štúdie",
+            "veda", "vedu", "vedné", "vied", "vedecký", "vedecká", "vedecké", "vedeckú", "výskum", "výskumné"
         ],
         "subcategory": [
             {
@@ -341,23 +363,24 @@
     {
         "name": "sport",
         "key_words": [
-            "protivnik", "protihrac",
+            "hra",
+            "prehra", "protivník", "protivníka", "protivníci", "protivníkov", "protihráč", "protihráči", "protihráča", "protihráčom",
             "rival",
-            "sport",
-            "trening"
+            "šport", "športový", "športová", "športovú",
+            "tréning", "trénuje", "trénované", "trénujú", "trénovanie",
+            "výhra"
         ],
         "subcategory": [
 
         ]
     },
     {
-        "name": "comunication",
+        "name": "media",
         "key_words": [
-            "internet",
-            "siet",
-            "telekomunikac",
-            "komunikac",
-            "web"
+            "internet", "internetový", "internetová", "internetovú",
+            "sieť", "siete", "správy",
+            "telekomunikačné", "telekomunikácia",
+            "web", "webový", "webová", "webovou"
         ],
         "subcategory": [
 
