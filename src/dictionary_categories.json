@@ -6,7 +6,7 @@
             "dieťa", "dcéra",
             "meno", "mená", "muž", "matka", "manželka", "manžel",
             "narodeniny", "narodený", "narodená", "narodil", "narodila", "narodenie", "narodenia",
-            "osobnost", "osoba", "osoby", "otec", "odišiel",
+            "osobnosť", "osoba", "osoby", "otec", "odišiel",
             "príbuzní", "pracoval", "pracovala", "predstaviteľ", "predstaviteľka", "pôsobil", "pôsobila", "profesor", "profesofka", "postava", "postáv",
             "rodič", "rodičia",
             "syn", "súrodenci", "súrodenec", "študoval", "študovala",
@@ -79,7 +79,6 @@
             "národ", "náboženstvo", "náboženstvá", "nábožensky", "náboženské", "náboženstiev",
             "občan", "občania", "občianstvo",
             "príslušník", "príslušnosť",
-            "skupín", "skupina", "skupiny",
             "vyznávač", "vyznávačka", "vyznávanie", "vyznávajú", "vyznávať", "vyznáva", "viera", "viery"
         ],
         "subcategory": [
@@ -132,14 +131,16 @@
         "name": "geographical",
         "key_words": [
             "geografický", "geografická", "geografickú",
-            "hranica", "hraničný", "hranice", "hranicou",
-            "kraj",  "krajské", "krajská", "krajskú", "krajina", "krajiny", "krajinou", "krajinu",
-            "mesto", "mestá", "mestom",
-            "okres", "okresy", "obyvateľov", "obyvatelia", "obec", "obce",
-            "región", "regióny", "regióne", "rozloha", "republika", "republiky",
-            "štát", "štáty", "štátov", "štátny", "štátna", "svet",
+            "hranica", "hraničný", "hranice", "hranicou", "hory", "hora", "horský", "horská", "horské",
+            "kraj",  "krajské", "krajská", "krajskú", "krajina", "krajiny", "krajinou", "krajinu", "kopce", "kopec",
+            "mesto", "mestá", "mestom", "mestu", "mestská", "mestskej",
+            "nadmorská výška", "námestie",
+            "okres", "okresy", "obyvateľov", "obyvatelia", "obec", "obce", "obyvateľstva",
+            "pohorie", "pohoria", "pohorí",
+            "región", "regióny", "regióne", "rozloha", "republika", "republiky", "rieka", "rieky",
+            "štát", "štáty", "štátov", "štátny", "štátna", "svet", "štvrť",
             "územie", "územia",
-            "vlajka", "vlajky",
+            "vlajka", "vlajky", "vojvodstvo", "vojvodstve",
             "znak"
         ],
         "subcategory": [
@@ -164,38 +165,18 @@
         ]
     },
     {
-        "name": "location",
-        "key_words": [
-            "hory", "hora", "horský", "horská", "horské",
-            "kopce", "kopec",
-            "pohorie", "pohoria", "pohorí",
-            "rieka", "rieky"
-        ],
-        "subcategory": [
-            {
-                "name": "mountain",
-                "key_words": [
-                    
-                ]
-            },
-            {
-                "name": "river",
-                "key_words": [
-                    
-                ]
-            }
-        ]
-    },
-    {
         "name": "product",
         "key_words": [
             "auto", "autá",
             "bicykel", "bicykle",
+            "jedlo", "jedlá", "jedlu",
             "lietadlo", "lietadlá",
             "motorka", "motorky",
+            "nápoj", "nápoje", "nápoja",
             "objekt",
-            "produkt",
-            "vozidlo", "vozidlá", "vrtulník", "vrtulníky"
+            "produkt", "predmet",
+            "vozidlo", "vozidlá", "vrtulník", "vrtulníky",
+            "zbraň", "zbrane"
         ],
         "subcategory": [
             {
@@ -221,10 +202,11 @@
     {
         "name": "event",
         "key_words": [
+            "akcia", "akcie", "akciou", "akciami", "atentát",
             "event",
             "koncert", "koncerty",
             "olympiáda", "olympijské",
-            "udalosť", "udalosti",
+            "udalosť", "udalosti", "uskutočnil", "uskutočnila", "uskutočnilo", "útok",
             "vojna", "vojnu", "vojne"
         ],
         "subcategory": [
@@ -251,14 +233,14 @@
     {
         "name": "art",
         "key_words": [
-            "artist",
+            "artist", "album", "albumy", "albumu", "albumov",
             "dielo", "diel", "diela",
             "farba", "farby", "film", "filmy",
-            "hudba", "hudobný", "hudobná",
+            "hudba", "hudobný", "hudobná", "hudobné",
             "kniha", "knihy", "kníh", "knižka", "knižky", "knižný", "knižná", "knižné",
             "literatúra", "literárna", "literárne", "literárny",
             "melódia", "muzika", "muzikál", "muzikálny", "muzikálny", "muzický", "muzická",
-            "publikácia", "publikácie", "publikáciu", "publikovaný", "publikovaná", "publikované", "publikovanú", "príbeh", "príbehy",
+            "publikácia", "publikácie", "publikáciu", "publikovaný", "publikovaná", "publikované", "publikovanú", "príbeh", "príbehy", "platňa", "platne", "platňu",
             "rytmus", "rytmický",
             "seriál", "sitkom", "sitcom",
             "tvorba", "text", "téma", "témy", "témou",
@@ -308,7 +290,7 @@
             "hmyz", "huba", "huby", "hríb", "hríby",
             "kvet", "kvety",
             "rastlina", "rastliny", "rastlinné",
-            "zviera", "zver", "zvieratá", "zvierat"
+            "zviera", "zver", "zvieratá", "zvierat", "živočích", "živočíchy"
         ],
         "subcategory": [
             {
@@ -345,15 +327,22 @@
             "biológia", "bio",
             "chémia",
             "fyzika", "filozofia",
+            "hviezda", "hviezdy", "hviezdokopa", "hviezdna",
             "matematika", "[a-Ž]+metria",
             "odbor", "odbory",
-            "poznanie",
-            "science", "skúma", "skúmané","štúdia", "štúdie",
+            "poznanie", "planéta", "planétka",
+            "science", "skúma", "skúmané","štúdia", "štúdie", "súhvezdie", "súhvezdia", "súhvezdí",
             "veda", "vedu", "vedné", "vied", "vedecký", "vedecká", "vedecké", "vedeckú", "výskum", "výskumné"
         ],
         "subcategory": [
             {
-                "name": "math",
+                "name": "medicine",
+                "key_words": [
+
+                ]
+            },
+            {
+                "name": "universe",
                 "key_words": [
 
                 ]

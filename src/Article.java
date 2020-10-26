@@ -3,9 +3,9 @@ import java.util.ArrayList;
 public class Article {
     String title;
     String mainCategory;
-    ArrayList<Integer> infoboxCategoriesInteger;
-    ArrayList<Integer> abstractCategoriesInteger;
-    ArrayList<Integer> articleCategoriesInteger;
+    String categoryFromInfobox;
+    String categoryFromAbstract;
+    String categoryFromArticle;
 
     public Article() {
 
@@ -27,28 +27,28 @@ public class Article {
         this.mainCategory = mainCategory;
     }
 
-    public ArrayList<Integer> getInfoboxCategoriesInteger() {
-        return infoboxCategoriesInteger;
+    public String getCategoryFromInfobox() {
+        return categoryFromInfobox;
     }
 
-    public void setInfoboxCategories(ArrayList<Integer> infoboxCategories) {
-        this.infoboxCategoriesInteger = infoboxCategories;
+    public void setCategoryFromInfobox(String categoryFromInfobox) {
+        this.categoryFromInfobox = categoryFromInfobox;
     }
 
-    public ArrayList<Integer> getAbstractCategoriesInteger() {
-        return abstractCategoriesInteger;
+    public String getCategoryFromAbstract() {
+        return categoryFromAbstract;
     }
 
-    public void setAbstractCategoriesInteger(ArrayList<Integer> abstractCategoriesInteger) {
-        this.abstractCategoriesInteger = abstractCategoriesInteger;
+    public void setCategoryFromAbstract(String categoryFromAbstract) {
+        this.categoryFromAbstract = categoryFromAbstract;
     }
 
-    public ArrayList<Integer> getArticleCategoriesInteger() {
-        return articleCategoriesInteger;
+    public String getCategoryFromArticle() {
+        return categoryFromArticle;
     }
 
-    public void setArticleCategoriesInteger(ArrayList<Integer> articleCategoriesInteger) {
-        this.articleCategoriesInteger = articleCategoriesInteger;
+    public void setCategoryFromArticle(String categoryFromArticle) {
+        this.categoryFromArticle = categoryFromArticle;
     }
 }
 
