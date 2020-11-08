@@ -1,9 +1,5 @@
-src/skwiki.xml
 .idea/
 .DS_Store
-out/
-output - kópia.txt
-matched.txt
-unmached.txt
 Projekt.iml
-src/dictionary_categories_nodiacritics.json
+files/skwiki.xml
+dictionaries/dictionary_categories_slim.json

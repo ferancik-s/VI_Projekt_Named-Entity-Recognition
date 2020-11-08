@@ -3,6 +3,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
+
 import java.util.*;
 
 
@@ -17,14 +18,14 @@ public class Parser {
     final static String GEOBOX = ".*\\{\\{Geobox\\s*(.*)";
     final static String ENDBOX = "[|\\s]*}}";
     final static String ABSTRACT = "\\s*(<text.*>)?'''.*'''.*";
-    final static String ARTICLE = "==.*==.*";
     final static String PAGE_START = ".*<page>.*";
     final static String PAGE_END = ".*</page>.*";
     final static String TITLE = ".*<title>(.*)</title>.*";
     final static String TEXT = ".*<text.*>.*";
     final static String TEXTEND = ".*</text.*>.*";
+    final static String CATEGORY = "\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s]*)([\\|\\]]).*";
 
-
+    public static ArrayList<String> categoriesList;
 
     public static Article article = new Article();
 
@@ -43,14 +44,14 @@ public class Parser {
     public static String[] categoriesNames = {
             "Osoba","Stavba","Národnosť/Vierovyznanie","Organizácia",
             "Geografia","Produkt","Udalosť","Umenie",
-            "Jazyk","Organizmus","Veda","Šport","Médiá"
+            "Jazyk","Príroda","Veda","Šport","Médiá"
     };
 
     public static JSONArray load_dictionary() {
         JSONParser parser = new JSONParser();
         JSONArray categoriesArray = null;
         try {
-            categoriesArray = (JSONArray) parser.parse(new FileReader("src/dictionary_categories.json"));
+            categoriesArray = (JSONArray) parser.parse(new FileReader("dictionaries/dictionary_categories.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,24 +61,26 @@ public class Parser {
     public static void find_category_keyword(JSONArray categoriesArray, String line, String partOfText) {
         Pattern pattern;
         Matcher matcher;
+        StringTokenizer tokenizer;
 
         int index = 0;
 
+        //lowercase
         String string = line.toLowerCase();
-        string = string.replaceAll("", "");
-        if (!keepRedirects){
-            string = string.replaceAll("[\\[]{2}([A-Za-zÇ-ž0-9\\s(),.:!?#]*)[|]+", "");
-        }
-        if (string.matches(".*(&lt;ref(\\s*name\\s*=\\s*&quot.*&quot;\\s*)?&gt;.*&lt;/ref&gt;).*")) {
-            string = string.replaceAll("(&lt;ref(\\s*name\\s*=\\s*&quot.*&quot;\\s*)?&gt;.*?&lt;/ref&gt;)", "");
-        }
-        if (string.matches(".*&lt;/ref&gt;.*")) {
-            string = string.replaceAll(".*&lt;/ref&gt;","");
-        }
+        //remove redirects
+        string = string.replaceAll("[\\[]{2}([ÁA-Za-zÇ-ž0-9\\s(),.:!?#]*)[|]+", "");
+        string = string.replaceAll("]]", "");
+        string = string.replaceAll("\\[\\[", "");
+        //remove reference
+        string = string.replaceAll("(&lt;ref(\\s*name\\s*=\\s*&quot.*&quot;\\s*)?&gt;.*?&lt;/ref&gt;)", "");
+        string = string.replaceAll(".*&lt;/ref&gt;","");
         if (string.matches(".*&lt;ref(\\s*name\\s*=\\s*&quot.*&quot;\\s*)?&gt;.*")) {
             string = string.replaceAll("(&lt;ref(\\s*name\\s*=\\s*&quot;.*&quot;\\s*)?&gt;.*)","");
             isReference = true;
         }
+        //remove long spaces
+        string = string.replaceAll("[\\s]{2,}", " ");
+
         for (Object object : categoriesArray){
             JSONObject category = (JSONObject) object;
             ArrayList<String> key_words = (ArrayList<String>) category.get("key_words");
@@ -90,55 +93,58 @@ public class Parser {
                     while (matcher.find()) {
                         categoriesCount[index]++;
                         totalMatches++;
-
-                        //System.out.println("LINE:\t\t" + string);
-                        //System.out.println("GUESS:\t\t" + category.get("name"));
-                        //System.out.println("KEY WORD:\t" + key);
-                        //System.out.println("---");
-
                     }
-                    /*
-                    if (subcategoriesArray != null) {
-                        for (Object subcategory : subcategoriesArray){
-                            JSONObject subcategoryJSON = (JSONObject) subcategory;
-                            ArrayList<String> subcategory_key_words = (ArrayList<String>) subcategoryJSON.get("key_words");
-                        }
-                    }
-                    */
                 }
-                //System.out.println(key);
             }
             index++;
         }
     }
 
-    public static PrintStream out;
+    public static PrintStream output;
     public static PrintStream matched;
     public static PrintStream unmatched;
 
+
     public static void match_category() {
-        System.setOut(out);
         System.setOut(matched);
         System.setOut(unmatched);
 
-//        out.println("NAME: " + article.getTitle());
-//        out.println("CATEGORY INFOBOX: " + article.getMainCategory());
-//        out.println("CATEGORY: " + article.getCategoryFromInfobox() + "," +  article.getCategoryFromAbstract() + "," + article.getCategoryFromArticle());
 
         if (article.getCategoryFromInfobox() == null && article.getCategoryFromAbstract() == null && article.getCategoryFromArticle() == null) {
-            unmatched.println(article.getTitle() + "\t{" + article.getMainCategory() + "}");
+            unmatched.println("<article>");
+            unmatched.println("\t<title>" + article.getTitle() + "</title>");
+            unmatched.println("\t<category name=infobox>" + article.getMainCategory() + "</category>");
+            unmatched.println("\t<categories>");
+            for (String category : categoriesList) {
+                unmatched.print("\t\t");
+                unmatched.println("<category>" + category + "</category>");
+            }
+            unmatched.println("\t</categories>");
+            unmatched.println("</article>");
+
         } else {
-            matched.println(article.getTitle() + "\t{" + article.getMainCategory() + "}\t[" + article.getCategoryFromInfobox() + ", " + article.getCategoryFromAbstract() + ", " + article.getCategoryFromArticle() + "]");
+            matched.println("<article>");
+            matched.println("\t<title>" + article.getTitle() + "</title>");
+            matched.println("\t<category name=infobox>" + article.getMainCategory() + "</category>");
+            matched.println("\t<categories>");
+            matched.println("\t\t<category_infobox_guess>" + article.getCategoryFromInfobox() +  "</category_infobox_guess>");
+            matched.println("\t\t<category_abstract_guess>"+ article.getCategoryFromAbstract() + "</category_abstract_guess>");
+            for (String category : categoriesList) {
+                matched.print("\t\t");
+                matched.println("<category>" + category + "</category>");
+            }
+            matched.println("\t</categories>");
+            matched.println("</article>");
         }
 
     }
 
     public static void select_category(String partOfText) {
-        System.setOut(out);
+        System.setOut(output);
 
         categoryString = null;
         int max = 0;
-        if (totalMatches > 4) {
+        if (totalMatches > 0) {
             for (int i = 0; i < numberOfCategories; i++) {
                 if (categoriesCount[i] > max) {
                     max = categoriesCount[i];
@@ -148,7 +154,7 @@ public class Parser {
 
             switch (partOfText) {
                 case "infobox" -> article.setCategoryFromInfobox(totalMatches > 4 ? categoryString : null);
-                case "abstract" -> article.setCategoryFromAbstract(totalMatches > 8 ? categoryString : null);
+                case "abstract" -> article.setCategoryFromAbstract(totalMatches > 2 ? categoryString : null);
                 case "article" -> article.setCategoryFromArticle(totalMatches > 20 ? categoryString : null);
             }
         }
@@ -178,12 +184,11 @@ public class Parser {
         try {
             JSONArray categoriesArray = load_dictionary();
 
-            out = new PrintStream(new FileOutputStream("output.txt"));
+            output = new PrintStream(new FileOutputStream("output.txt"));
             matched = new PrintStream(new FileOutputStream("matched.txt"));
             unmatched = new PrintStream(new FileOutputStream("unmached.txt"));
-            System.setOut(out);
 
-            file = new FileInputStream("src/skwiki.xml");
+            file = new FileInputStream("src/short.xml");
             bufReader = new BufferedReader(new InputStreamReader(file));
 
             String line = bufReader.readLine();
@@ -211,6 +216,7 @@ public class Parser {
                         } else {
                             //every correct title that matches the regex
                             if (line.matches(TITLE)) {
+                                categoriesList = new ArrayList<>();
                                 pattern = Pattern.compile(TITLE);
                                 matcher = pattern.matcher(line);
 
@@ -218,7 +224,7 @@ public class Parser {
                                 while (!line.matches(TEXT)) {
                                     line = bufReader.readLine();
                                 }
-                                if (line.matches(".*<text.*>#(REDIRECT|redirect|Redirect).*</text>.*")) {
+                                if (line.matches(".*<text.*>#(REDIRECT|redirect|Redirect|presmeruj|Presmeruj|PRESMERUJ).*</text>.*")) {
                                     continue;
                                 }
 
@@ -230,7 +236,7 @@ public class Parser {
                                 while (!line.matches(PAGE_END)) {
 
                                     if (line.matches(INFOBOX) || line.matches(GEOBOX)){
-                                        pattern = Pattern.compile(".*\\{\\{(Infobox|Geobox\\s*[|]{1})\\s*([A-Za-zÇ-ž0-9,.:()!?-_'\"\\s]*)(|)?");
+                                        pattern = Pattern.compile(".*\\{\\{(Infobox|Geobox\\s*[|]{1})\\s*([ÁA-Za-zÇ-ž0-9,.:()!?-_'\"\\s]*)(|)?");
                                         matcher = pattern.matcher(line);
                                         if (article.getMainCategory() == null) {
                                             article.setMainCategory((matcher.find() ? matcher.group(2) : null));
@@ -253,7 +259,7 @@ public class Parser {
                                     }
                                     if (line.matches(ABSTRACT)) {
 
-                                        while (!line.matches(ARTICLE) && !line.matches(TEXTEND)) {
+                                        while (!line.matches("")) {
                                             find_category_keyword(categoriesArray, line, "abstract");
                                             if (isReference) {
                                                 skip_reference(line, bufReader, categoriesArray, "abstract");
@@ -264,17 +270,12 @@ public class Parser {
                                             select_category("abstract");
                                         }
                                     }
-                                    if (line.matches(ARTICLE)) {
+                                    if (line.matches(CATEGORY)) {
+                                        pattern = Pattern.compile(CATEGORY);
+                                        matcher = pattern.matcher(line);
 
-                                        while (!line.matches(TEXTEND)) {
-                                            find_category_keyword(categoriesArray, line, "article");
-                                            if (isReference) {
-                                                skip_reference(line, bufReader, categoriesArray, "article");
-                                            }
-                                            line = bufReader.readLine();
-                                        }
-                                        if (totalMatches != 0) {
-                                            select_category("article");
+                                        while (matcher.find()) {
+                                            categoriesList.add(matcher.group(1));
                                         }
                                     }
                                     if (line.matches(TEXTEND)) {
