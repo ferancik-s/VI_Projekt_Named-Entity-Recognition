@@ -21,7 +21,7 @@ public class ParserCategories {
         }
     }
 
-    public static String searchMethod = "BFS";
+    public static String searchMethod = "DFS";
     public static int maxDepth = 2;
 
     public static void main(String[] args) throws IOException {
@@ -66,7 +66,7 @@ public class ParserCategories {
                 while (matcher.find()) {
                     output.print(matcher.group(1));
                 }
-                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.-]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
+                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
                     line = bufReader.readLine();
                     if (line.matches(".*#(REDIRECT|redirect|Redirect|presmeruj|Presmeruj|PRESMERUJ).*")) {
                         searched = true;
@@ -79,8 +79,8 @@ public class ParserCategories {
                         break;
                     }
                 }
-                while (!line.matches(".*</text.*>.*")) {
-                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.-]*)([|\\]]).*");
+                while (!line.matches(".*</text.*>.*") && !searched) {
+                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
                     matcher = pattern.matcher(line);
 
                     while (matcher.find()) {
@@ -88,12 +88,12 @@ public class ParserCategories {
                     }
                     line = bufReader.readLine();
                 }
-                if (line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.-]*)([|\\]]).*")) {
-                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.-]*)([|\\]]).*");
+                if (line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*")) {
+                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
                     matcher = pattern.matcher(line);
 
                     while (matcher.find()) {
-                        categories.add(matcher.group(1));
+                        categories.add(matcher.group(1).replaceAll(" ", " "));
                     }
                     if (categories.size() < 3) maxDepth = 4;
                     else maxDepth = 2;
@@ -161,11 +161,11 @@ public class ParserCategories {
 
         String line = reader.readLine();
         while (line != null) {
-            if (line.matches("NAME: " + category)) {
+            if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
                 line = reader.readLine();
                 while (!line.matches(".*NAME:.*")) {
                     if (!check_category(line)) {
-                        if (depth < maxDepth && search_categories_DFS(line, depth+1)) {
+                        if (depth < maxDepth && search_categories_DFS(line.replaceAll(" ", " "), depth+1)) {
                             return true;
                         }
                     }
@@ -199,7 +199,7 @@ public class ParserCategories {
 
         String line = reader.readLine();
         while (line != null) {
-            if (line.matches("NAME: " + category)) {
+            if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
                 line = reader.readLine();
                 queue = new ArrayList<>();
                 while (!line.matches(".*NAME:.*") && !found) {
@@ -208,7 +208,7 @@ public class ParserCategories {
                         output.println(" - " + selectedCategory + selectedSubCategory);
                         return true;
                     }
-                    queue.add(line);
+                    queue.add(line.replaceAll(" ", " "));
                     line = reader.readLine();
                 }
                 for (String cat : queue) {

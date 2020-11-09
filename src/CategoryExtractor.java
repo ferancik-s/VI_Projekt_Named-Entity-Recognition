@@ -24,26 +24,26 @@ public class CategoryExtractor {
                 pattern = Pattern.compile(".*<title>Kategória:(.*)</title>.*");
                 matcher = pattern.matcher(line);
                 while (matcher.find()) {
-                    categories.println("NAME: " + matcher.group(1));
+                    categories.println("NAME: " + matcher.group(1).replaceAll(" ", " "));
                 }
-                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s.,-]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
+                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
                     line = bufReader.readLine();
                 }
                 while (!line.matches(".*</text.*>.*")) {
-                        pattern = Pattern.compile("\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,-]*)([|\\]]).*");
+                        pattern = Pattern.compile("\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
                         matcher = pattern.matcher(line);
 
                         while (matcher.find()) {
-                            categories.println(matcher.group(1));
+                            categories.println(matcher.group(1).replaceAll(" ", " "));
                         }
                         line = bufReader.readLine();
                 }
-                if (line.matches(".*\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,-]*)([|\\]]).*")) {
-                    pattern = Pattern.compile("\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,-]*)([|\\]]).*");
+                if (line.matches(".*\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*")) {
+                    pattern = Pattern.compile("\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
                     matcher = pattern.matcher(line);
 
                     while (matcher.find()) {
-                        categories.println(matcher.group(1));
+                        categories.println(matcher.group(1).replaceAll(" ", " "));
                     }
                 }
             }

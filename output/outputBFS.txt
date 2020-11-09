@@ -598,7 +598,7 @@ Thomas Hobbes - person
 Paul Heinrich Dietrich von Holbach - person
 Homér - person
 Axel Honneth - person
-Horatius - person
+Horatius - non-entity
 Max Horkheimer - person
 Cyrill József Horváth - person
 Igor Hrušovský - person
@@ -797,7 +797,7 @@ Pavol (apoštol) - person
 Peter (apoštol) - person
 Pavol VI. - person
 Karl Pearson - person
-Charles Sanders Peirce - miscellaneous (language)
+Charles Sanders Peirce - person
 Miroslav Petříček - person
 Petrus Lombardus - redirect
 William Petty - person
@@ -940,7 +940,7 @@ Giovanni Battista Vico - person
 Vasubandhu mladší - person
 Gianni Vattimo - person
 Thorstein Veblen - person
-Vergílius - person
+Vergílius - non-entity
 Vidhjavásí - person
 François Viète - person
 Stanisław Vincenz - person
@@ -1108,3 +1108,723 @@ Fínsko - location (state/country)
 Portugalsko - location (state/country)
 Dánsko - location (state/country)
 Malta - location (state/country)
+Belgicko - location (state/country)
+Taliansko - location (state/country)
+Luxembursko - location (state/country)
+Holandsko - location (state/country)
+Babylon 5 - miscellaneous (workOfArt)
+Star Trek (filmy a seriály) - miscellaneous (workOfArt)
+24 (seriál) - miscellaneous (workOfArt)
+Hviezdna brána (seriál) - miscellaneous (workOfArt)
+Hviezdna brána: Atlantída - miscellaneous (workOfArt)
+MacGyver - miscellaneous (workOfArt)
+Simpsonovci - miscellaneous (workOfArt)
+Futurama - miscellaneous (workOfArt)
+Ženatý so záväzkami - miscellaneous (workOfArt)
+Xena (seriál) - miscellaneous (workOfArt)
+Andromeda (seriál) - miscellaneous (workOfArt)
+Červený trpaslík (seriál) - miscellaneous (workOfArt)
+Krok za krokom - miscellaneous (workOfArt)
+Priatelia (seriál) - miscellaneous (workOfArt)
+Krajné medze - non-entity
+Akty X - miscellaneous (workOfArt)
+Parker Lewis neprehráva - miscellaneous (workOfArt)
+Pohotovosť (seriál) - miscellaneous (workOfArt)
+Chicago Hope - miscellaneous (workOfArt)
+Mestečko South Park - miscellaneous (workOfArt)
+Dempsey a Makepeaceová - miscellaneous (workOfArt)
+Derrick - miscellaneous (workOfArt)
+M*A*S*H - miscellaneous (workOfArt)
+JAG – Vojenská generálna prokuratúra - miscellaneous (workOfArt)
+Beverly Hills 90210 - miscellaneous (workOfArt)
+Everwood - miscellaneous (workOfArt)
+Sex v meste - miscellaneous (workOfArt)
+Teória formálnych jazykov - miscellaneous (language)
+V siedmom nebi - miscellaneous (workOfArt)
+Jazyk - disambiguation
+Komisár Rex - miscellaneous (workOfArt)
+Riptide - non-entity
+Zákon a poriadok - non-entity
+Brutálna Nikita (seriál) - miscellaneous (workOfArt)
+Frasier - miscellaneous (workOfArt)
+Zborovňa (seriál) - miscellaneous (workOfArt)
+Arabela (seriál) - miscellaneous (workOfArt)
+Solinky - location (town/city)
+Rača (miestna časť) - location (town/city)
+Bratislava – mestská časť Lamač - location (town/city)
+Aupark (Bratislava) - location (facility)
+VIVO! Bratislava - location (facility)
+Polus - disambiguation
+Marlon Brando - person
+Clint Eastwood - person
+Gérard Depardieu - person
+Stano Dančiak - person
+Milan Lasica - person
+Július Satinský - person
+Roberto Benigni - person
+Martin Dejdar - person
+Danny Boyle - person
+Stanley Kubrick - person
+Blake Edwards - person
+Tim Burton - person
+Juraj Jakubisko - person
+Martin Frič - person
+David Arnold - person
+Angelo Badalamenti - person
+Danny Elfman - person
+John Williams - person
+Nicole Kidmanová - person
+Catherine Zeta-Jonesová - person
+Milla Jovovichová - person
+Uma Thurmanová - person
+Formálny jazyk - miscellaneous (language)
+Čaj - miscellaneous (workOfArt)
+1960 - non-entity
+1993 - non-entity
+1992 - non-entity
+1946 - non-entity
+20. január - non-entity
+27. marec - non-entity
+1963 - non-entity
+Steven Soderbergh - person
+Steven Spielberg - person
+George Lucas - person
+Mel Brooks - person
+Mel Gibson - person
+Michael J. Fox - person
+1955 - non-entity
+19. marec - non-entity
+30. september - non-entity
+3. január - non-entity
+1956 - non-entity
+1959 - non-entity
+18. marec - non-entity
+Rím - location (town/city)
+Londýn - location (town/city)
+Spojené štáty - location (state/country)
+Viedeň - location (town/city)
+Budapešť - location (town/city)
+Amsterdam - location (town/city)
+Dublin - location (town/city)
+Peking - location (town/city)
+Moskva - location (town/city)
+Varšava - location (town/city)
+Istanbul - location (town/city)
+Ankara - location (town/city)
+Buenos Aires - location (town/city)
+Lima - location (town/city)
+Caracas - location (town/city)
+Uruguaj - location (state/country)
+Bogota - location (town/city)
+Havana - location (town/city)
+Bujumbura - location (town/city)
+Damask - location (town/city)
+Bagdad - location (town/city)
+Teherán - location (town/city)
+Tel Aviv-Jafo - location (town/city)
+Jeruzalem - location (town/city)
+Ulanbátar - location (town/city)
+Lisabon - location (town/city)
+Bukurešť - location (town/city)
+Oslo - location (town/city)
+Bern (mesto) - location (town/city)
+San Maríno (štát) - redirect
+Vatikán - location (town/city)
+Štokholm - location (town/city)
+Vaduz - location (town/city)
+Monako (štát) - redirect
+Reykjavík - location (town/city)
+Reykjavik - redirect
+Atény - location (town/city)
+Kodaň - location (town/city)
+Sofia - location (town/city)
+Veľká Británia - disambiguation
+Brusel - location (town/city)
+Andorra (štát) - redirect
+Tirana - location (town/city)
+Helsinki - location (town/city)
+Luxemburg (mesto) - location (town/city)
+Kábul - location (town/city)
+Manáma - location (town/city)
+Dháka - location (town/city)
+Rangún - location (town/city)
+Mjanmarsko - location (state/country)
+Thimphu - location (town/city)
+Bhután - location (state/country)
+Bandar Seri Begawan - location (town/city)
+Nikózia - location (town/city)
+Manila - location (town/city)
+Naí Dillí - location (town/city)
+Jakarta - location (town/city)
+Tokio - location (town/city)
+Saná - location (town/city)
+Ammán - location (town/city)
+Jordánsko - location (state/country)
+Soul - location (town/city)
+Phnom Pénh - location (town/city)
+Dauha - location (town/city)
+Pchjongjang - location (town/city)
+Kórejská ľudovodemokratická republika - location (state/country)
+Kuvajt (mesto) - location (town/city)
+Kuvajt (štát) - location (state/country)
+Vientian - location (town/city)
+Bejrút - location (town/city)
+Islamabad - location (town/city)
+Rijád - location (town/city)
+Saudská Arábia - location (state/country)
+Kuala Lumpur - location (town/city)
+Male - location (town/city)
+Káthmandu - location (town/city)
+Maskat (mesto) - location (town/city)
+Singapur - location (town/city)
+Kolombo - location (town/city)
+Bangkok - location (town/city)
+Hanoj - location (town/city)
+Alžír - location (town/city)
+Luanda - location (town/city)
+Cotonou - location (town/city)
+Mogadiisho - redirect
+Nuuk - location (town/city)
+Washington, D. C. - location (town/city)
+Ottawa - location (town/city)
+Mexiko (mesto) - location (town/city)
+Brazília (mesto) - location (town/city)
+Santiago (Čile) - location (town/city)
+Asunción - location (town/city)
+Montevideo - location (town/city)
+Wellington - location (town/city)
+Volga - location (gpe)
+Ural (rieka) - location (gpe)
+Dneper - location (state/country)
+Kama - location (gpe)
+Don - location (gpe)
+Pečora - location (gpe)
+Rýn - location (gpe)
+Mont Blanc - location (gpe)
+Ladožské jazero - location (gpe)
+Madagaskar - location (state/country)
+Geografia - location (gpe)
+Maldivy - location (state/country)
+Aj múdry schybí - miscellaneous (workOfArt)
+Čína - location (state/country)
+Abeceda (jazykoveda) - non-entity
+Slovo (teória automatov) - miscellaneous (language)
+Kaspické more - location (gpe)
+Aralské jazero - location (state/country)
+Bajkalské jazero - location (gpe)
+Titicaca - location (gpe)
+Hurónske jazero - location (gpe)
+Veľké medvedie jazero - location (gpe)
+Veľké jazero otrokov - location (gpe)
+Ontárijské jazero - location (gpe)
+Nikaragua (jazero) - location (gpe)
+Balaton (jazero) - location (gpe)
+Grónsko - location (gpe)
+Unguja - location (gpe)
+Ohňová zem (súostrovie) - location (gpe)
+Marajó - location (gpe)
+Ras Dašän - location (gpe)
+Etiópia - location (state/country)
+Slnko - non-entity
+Džabal Tubkál - location (gpe)
+Vinson Massif - location (gpe)
+Mount Kirkpatrick - location (gpe)
+Mount Everest - location (gpe)
+Ararat (vrch v Turecku) - location (gpe)
+Sněžka - location (gpe)
+Vezuv - location (gpe)
+Klínovec - location (gpe)
+Finsteraarhorn - location (gpe)
+Massif des Écrins - location (gpe)
+Monte Viso - location (gpe)
+Ortler - location (gpe)
+Olymp - location (gpe)
+Etna - location (gpe)
+Monte Corno - redirect
+Zugspitze - location (gpe)
+Dachstein - location (gpe)
+Marmolada - location (gpe)
+Pico de Aneto - location (gpe)
+Mulhacén - location (gpe)
+Kylléne - location (gpe)
+Réunion - location (gpe)
+Maurícius - location (state/country)
+Sumatra - location (gpe)
+Kodiak (ostrov) - location (gpe)
+Portoriko - location (gpe)
+Jang-c’-ťiang - location (gpe)
+Rumunsko - location (state/country)
+Jemen - location (state/country)
+Afganistan - location (state/country)
+7. január - non-entity
+1964 - non-entity
+Libanon - location (state/country)
+14. marec - non-entity
+1933 - non-entity
+8. september - non-entity
+1925 - non-entity
+24. júl - non-entity
+1980 - non-entity
+30. júl - non-entity
+1948 - non-entity
+31. júl - non-entity
+1914 - non-entity
+27. január - non-entity
+1983 - non-entity
+Omán - location (state/country)
+18. apríl - non-entity
+24. marec - non-entity
+1879 - non-entity
+19. jún - non-entity
+1623 - non-entity
+19. august - non-entity
+1662 - non-entity
+2. február - non-entity
+1849 - non-entity
+8. november - non-entity
+1921 - non-entity
+7. marec - non-entity
+1274 - non-entity
+26. apríl - non-entity
+121 - non-entity
+17. marec - non-entity
+180 - non-entity
+23. február - non-entity
+1883 - non-entity
+26. február - non-entity
+1969 - non-entity
+5. máj - non-entity
+1818 - non-entity
+6. máj - non-entity
+1781 - non-entity
+27. september - non-entity
+1832 - non-entity
+14. február - non-entity
+869 - non-entity
+827 - non-entity
+15. október - non-entity
+70 pred Kr. - non-entity
+21. september - non-entity
+19 pred Kr. - non-entity
+17. február - non-entity
+1986 - non-entity
+26. október - non-entity
+1758 - non-entity
+10. apríl - non-entity
+1823 - non-entity
+15. január - non-entity
+1548 - non-entity
+25. september - non-entity
+1617 - non-entity
+9. júl - non-entity
+1677 - non-entity
+8. február - non-entity
+4. apríl - non-entity
+397 - non-entity
+1919 - non-entity
+21. apríl - non-entity
+1864 - non-entity
+14. jún - non-entity
+1920 - non-entity
+2. október - non-entity
+15. júl - non-entity
+1901 - non-entity
+9. september - non-entity
+1990 - non-entity
+1722 - non-entity
+1784 - non-entity
+5. jún - non-entity
+1723 - non-entity
+17. júl - non-entity
+1790 - non-entity
+6. august - non-entity
+11. september - non-entity
+1903 - non-entity
+22. máj - non-entity
+1. január - organization (corporation)
+Piaty element - miscellaneous (workOfArt)
+1997 - non-entity
+31. august - non-entity
+20. storočie - non-entity
+Storočie - non-entity
+Brutálna Nikita - disambiguation
+Hviezdna brána (film) - miscellaneous (workOfArt)
+Roland Emmerich - person
+10. november - non-entity
+Peru - location (state/country)
+Dominika (štát) - location (state/country)
+Ghana - location (state/country)
+20. stor - redirect
+1978 - non-entity
+3. november - non-entity
+Roseau - location (town/city)
+Barma - redirect
+Galéria štátnych vlajok - non-entity
+Reakcia spätnou väzbou - organization (corporation)
+Pompeje - location (town/city)
+1957 - non-entity
+6. marec - non-entity
+Akkra - location (town/city)
+Medzikontinentálna balistická strela - redirect
+ICBM - redirect
+19. storočie - non-entity
+1795 - non-entity
+18. storočie - non-entity
+384 pred Kr. - non-entity
+322 pred Kr. - non-entity
+322 pred Kr - redirect
+384 pred Kr - redirect
+Streda - non-entity
+Pondelok - non-entity
+Utorok - non-entity
+Štvrtok - non-entity
+Piatok - non-entity
+Sobota - non-entity
+Nedeľa - non-entity
+Disketa - miscellaneous (product)
+Kanada - location (state/country)
+1. máj - non-entity
+2004 - non-entity
+21. storočie - non-entity
+0. roky 21. storočia - non-entity
+1995 - non-entity
+45 pred Kr. - non-entity
+132 pred Kr. - non-entity
+1981 - non-entity
+1973 - non-entity
+29. marec - non-entity
+1999 - non-entity
+Message-Digest algorithm - non-entity
+Spider-Man (film) - miscellaneous (workOfArt)
+Spider-Man 2 - miscellaneous (workOfArt)
+Sam Raimi - person
+23. október - non-entity
+Batman (film z roku 1989) - miscellaneous (workOfArt)
+Batman sa vracia - miscellaneous (workOfArt)
+Michael Keaton - person
+5. september - non-entity
+1951 - non-entity
+Jackie Brownová - miscellaneous (workOfArt)
+Jurský park - miscellaneous (workOfArt)
+18. december - non-entity
+Sam Neill - person
+14. september - non-entity
+1947 - non-entity
+Laura Dernová - person
+10. február - non-entity
+1967 - non-entity
+Bruce Dern - person
+4. jún - non-entity
+1936 - non-entity
+Jeff Goldblum - person
+22. október - non-entity
+1952 - non-entity
+Zoznam nositeľov Nobelovej ceny za fyziku - non-entity
+Zoznam nositeľov Nobelovej ceny za mier - non-entity
+Zoznam nositeľov Nobelovej ceny za literatúru - non-entity
+Zoznam nositeľov Nobelovej ceny za chémiu - non-entity
+Kráľ Artuš (film) - miscellaneous (workOfArt)
+Krstný otec (film) - miscellaneous (workOfArt)
+THX 1138 - miscellaneous (workOfArt)
+Firma (film) - miscellaneous (workOfArt)
+Narodený 4. júla - miscellaneous (workOfArt)
+Rain Man - miscellaneous (workOfArt)
+Hrdina proti svojej vôli - miscellaneous (workOfArt)
+Polnočný kovboj - miscellaneous (workOfArt)
+Wolfgang Petersen - person
+1941 - non-entity
+Terminál (film) - miscellaneous (workOfArt)
+Tom Hanks - person
+Hálova ulica - location (town/city)
+Tupolevova ulica - location (town/city)
+Osuského ulica - location (town/city)
+Markova ulica - location (town/city)
+Ševčenkova ulica (Bratislava) - location (town/city)
+Belinského ulica - location (town/city)
+Fedinova ulica - location (town/city)
+Černyševského ulica - location (town/city)
+Romanova ulica - location (town/city)
+Vígľašská ulica - location (town/city)
+Jantárová cesta (Bratislava) - location (town/city)
+Prokofievova ulica - location (town/city)
+Iľjušinova ulica - location (town/city)
+Pajštúnska ulica - location (town/city)
+Brančská ulica - location (town/city)
+Jiráskova ulica (Bratislava) - location (town/city)
+Smolenická ulica - location (town/city)
+Šintavská ulica (Bratislava) - location (town/city)
+Znievska ulica - location (town/city)
+Jantárova cesta - redirect
+Topoľčianska ulica (Bratislava) - location (town/city)
+Holíčska ulica - location (town/city)
+Strečnianska ulica (Bratislava) - location (town/city)
+Panónska cesta - location (town/city)
+Vyšehradská ulica - location (town/city)
+Vigľašská - redirect
+Šášovská ulica - location (town/city)
+Beňadická ulica - location (town/city)
+Lietavská ulica - location (town/city)
+Krásnohorská ulica - location (gpe)
+Ľubovnianska ulica - location (town/city)
+Žehrianska ulica - location (town/city)
+Jasovská ulica - location (gpe)
+Turnianska ulica - location (gpe)
+Dolnozemská cesta - location (town/city)
+Kutlíkova ulica - location (town/city)
+Tematínska ulica (Bratislava) - location (town/city)
+Rovniankova ulica (Bratislava) - location (town/city)
+Gessayova ulica - location (town/city)
+Hrobákova ulica - location (town/city)
+Ambroseho ulica - location (town/city)
+Bradáčova ulica (Bratislava) - location (town/city)
+Dudova ulica (Bratislava) - location (town/city)
+Haanova ulica - location (town/city)
+Lachova ulica - location (town/city)
+Furdekova ulica - disambiguation
+Mlynarovičova ulica - location (town/city)
+Mamateyova ulica - location (town/city)
+Pankúchova ulica - location (town/city)
+Polereckého ulica - location (town/city)
+Gettingova ulica - location (town/city)
+Bulíkova ulica - location (town/city)
+Blagoevova ulica - location (town/city)
+Šustekova ulica - location (town/city)
+Bosákova ulica - disambiguation
+Sosnová ulica (Bratislava) - location (town/city)
+Pobrežná ulica (Bratislava) - location (town/city)
+Májová ulica - disambiguation
+Klokočova ulica (Bratislava) - location (town/city)
+Pri seči - location (town/city)
+Kočánkova ulica - location (town/city)
+Einsteinova ulica - location (town/city)
+Pri Starom háji - location (town/city)
+Viedenská cesta - location (town/city)
+Rusovská cesta - location (town/city)
+Záporožská ulica - location (town/city)
+Röntgenova ulica - location (town/city)
+Gercenova ulica - location (town/city)
+Lenardova ulica - location (town/city)
+Kapicova ulica - location (town/city)
+Dubnická ulica (Bratislava) - location (town/city)
+Kremnická ulica - disambiguation
+Levočská ulica (Bratislava) - location (town/city)
+Handlovská ulica - location (gpe)
+Prokopova ulica - location (town/city)
+Jaroslavova ulica - location (town/city)
+Očovská ulica - location (town/city)
+Krupinská ulica (Bratislava) - location (town/city)
+Vilová ulica - disambiguation
+Vranovská ulica (Bratislava) - location (town/city)
+Údernícka ulica - location (gpe)
+Gogoľova ulica (Bratislava) - location (town/city)
+Kopčianska ulica (Bratislava) - location (town/city)
+Kaukazská ulica - location (town/city)
+Dargovská ulica (Bratislava) - location (town/city)
+Kubínska ulica - disambiguation
+Goralská ulica - location (town/city)
+Hrobárska ulica - location (town/city)
+Nábrežná ulica - disambiguation
+Bratská ulica - disambiguation
+Kolmá ulica (Bratislava) - location (town/city)
+Ulica Ondreja Štefanka - location (town/city)
+Švabinského ulica (Bratislava) - location (town/city)
+Andrusovova ulica - location (town/city)
+Pifflova ulica - location (town/city)
+Jungmannova ulica - location (town/city)
+Vavilovova ulica - location (town/city)
+Farského ulica - location (town/city)
+Macharova ulica - location (town/city)
+Planckova ulica - location (town/city)
+Pečnianska ulica - location (town/city)
+Bohrova ulica - location (town/city)
+Zadunajská cesta - location (town/city)
+Krasovského ulica - location (town/city)
+Ulica Medveďovej - location (town/city)
+Jankolova ulica - location (town/city)
+Ulica Alžbety Gwerkovej - location (town/city)
+Ulica Marie Curie Sklodowskej - location (town/city)
+Antolská ulica (Bratislava) - location (town/city)
+Betliarska ulica - disambiguation
+Bzovícka ulica - location (town/city)
+Daliborovo námestie - location (town/city)
+Nobelovo námestie - location (town/city)
+Šrobárovo námestie - location (town/city)
+Mánesovo námestie - location (town/city)
+Muchovo námestie - location (town/city)
+Námestie hraničiarov - location (town/city)
+Humenské námestie - location (town/city)
+Ovsištské námestie - location (town/city)
+Vlastenecké námestie - location (town/city)
+Veľký Draždiak - location (town/city)
+Kuchajda - location (town/city)
+Zlaté piesky (Bratislava) - location (town/city)
+1918 - non-entity
+19. február - non-entity
+6. január - non-entity
+3. marec - non-entity
+1845 - non-entity
+15. marec - non-entity
+9. november - non-entity
+1922 - non-entity
+1974 - non-entity
+Josif Vissarionovic Stalin - redirect
+25. marec - non-entity
+7. november - non-entity
+4. január - non-entity
+16. december - non-entity
+25. január - non-entity
+1984 - non-entity
+27. február - non-entity
+1913 - non-entity
+1861 - non-entity
+7. august - non-entity
+1988 - non-entity
+26. september - non-entity
+26. máj - non-entity
+20. apríl - non-entity
+30. apríl - non-entity
+1889 - non-entity
+Kalkata - location (town/city)
+Čadca - location (town/city)
+Myanmar - redirect
+San Marino - disambiguation
+Andora - redirect
+Maurítius - redirect
+Azbuka - disambiguation
+Prepis z cyriliky do latinky - miscellaneous (language)
+Južná Amerika - location (gpe)
+Severná Amerika - location (gpe)
+Austrália (kontinent) - redirect
+Austrália (štát) - location (state/country)
+Austrália (svetadiel) - location (state/country)
+Oceánia - disambiguation
+Herculaneum - location (town/city)
+Lahár - non-entity
+Káhira - location (town/city)
+Fidži - location (state/country)
+Suva - location (town/city)
+1970 - non-entity
+10. október - non-entity
+1939 - non-entity
+1643 - non-entity
+31. marec - non-entity
+1727 - non-entity
+Austrálsky zväz - redirect
+Venezuelská bolívarovská republika - redirect
+Čilská republika - redirect
+Kamčatka - location (gpe)
+Čukotka (autonómny okruh) - location (gpe)
+Beringovo more - location (gpe)
+Ochotské more - location (gpe)
+Juhočínske more - location (gpe)
+Arabské more - location (gpe)
+Červené more - location (gpe)
+Indický oceán - location (gpe)
+Barentsovo more - location (gpe)
+Nórske more - location (gpe)
+Severné more - location (gpe)
+Baltské more - location (gpe)
+Tichý oceán - location (gpe)
+Karibské more - location (gpe)
+Japonské more - location (gpe)
+Filipínske more - location (gpe)
+Bandské more - location (gpe)
+Arafurské more - location (gpe)
+Žlté more - location (gpe)
+Andamanské more - location (gpe)
+Severný ľadový oceán - location (gpe)
+Ligúrske more - location (gpe)
+Írske more - location (gpe)
+Keltské more - location (gpe)
+Karské more - location (gpe)
+More Laptevovcov - location (gpe)
+Východosibírske more - location (gpe)
+Čukotské more - location (gpe)
+Biele more - location (gpe)
+Timorské more - location (gpe)
+Tasmanovo more - location (gpe)
+Koralové more - location (gpe)
+Beaufortovo more - location (gpe)
+Sargasové more - location (gpe)
+Mexický záliv - location (gpe)
+Hudsonov záliv - location (gpe)
+Baffinovo more - location (gpe)
+Boothijský záliv - location (gpe)
+Grónske more - location (gpe)
+Jamesova zátoka - location (gpe)
+Perzský záliv - location (gpe)
+Biskajský záliv - location (gpe)
+Aljašský záliv - location (gpe)
+Rossovo more - location (gpe)
+Weddellovo more - location (gpe)
+Amundsenovo more - location (gpe)
+D’Urvillovo more - location (gpe)
+Bellingshausenovo more - location (gpe)
+Špicbergy - redirect
+Trinidad a Tobago - location (state/country)
+Duns Scotus - redirect
+Port of Spain - location (town/city)
+Gottfried Leibniz - redirect
+Friedrich Wilhelm Joseph Schelling - redirect
+Friedrich Schlegel - redirect
+2. august - non-entity
+Divízia Tawakalna - location (gpe)
+1991 - non-entity
+Dahrán - location (town/city)
+21. november - non-entity
+1768 - non-entity
+Kierkegaard - redirect
+1813 - non-entity
+1855 - non-entity
+12. február - non-entity
+1834 - non-entity
+480 - non-entity
+524 - non-entity
+1079 - non-entity
+1142 - non-entity
+1906 - non-entity
+14. október - non-entity
+1975 - non-entity
+4. december - non-entity
+New York (mesto) - location (town/city)
+New York - disambiguation
+Virgínia - location (state/country)
+New York (štát USA) - location (state/country)
+Richmond - location (town/city)
+Albany (New York) - location (town/city)
+Aljaška - location (state/country)
+Juneau - location (town/city)
+Sacramento (Kalifornia) - location (town/city)
+Kalifornia - location (state/country)
+1880 - non-entity
+21. júl - non-entity
+4. máj - non-entity
+Pensylvánia - location (state/country)
+Harrisburg (Pensylvánia) - location (town/city)
+Philadelphia - location (town/city)
+Virginia - disambiguation
+Žilinský kraj - location (gpe)
+Žilina (okres) - location (gpe)
+Vektorový priestor - non-entity
+Dmitrij Ivanovič Mendelejev - person
+7. február - non-entity
+1907 - non-entity
+1850 - non-entity
+1787 - non-entity
+12. december - non-entity
+1788 - non-entity
+1789 - non-entity
+1791 - non-entity
+1792 - non-entity
+1863 - non-entity
+26. jún - non-entity
+25. jún - non-entity
+21. jún - non-entity
+23. máj - non-entity
+28. apríl - non-entity
+6. február - non-entity
+9. január - non-entity
+2. január - non-entity
+7. december - non-entity
+Indiana - location (state/country)
+1816 - non-entity
