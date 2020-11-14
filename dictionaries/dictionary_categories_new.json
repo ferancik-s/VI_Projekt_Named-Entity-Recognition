@@ -63,7 +63,7 @@
     {
         "name": "miscellaneous",
         "key_words": [
-            "dejiny", "história", "literatúra", "výrobky", "národnosti", "kultúra", "jazyk", "jazyky"
+            "dejiny", "história", "literatúra", "výrobky", "národnosti", "kultúra", "umenie", "jazyk", "jazyky", "šport", "športy"
         ],
         "subcategory": [
             {
@@ -87,13 +87,19 @@
             {
                 "name": "workOfArt",
                 "key_words": [
-                    "kultúra", "literatúra"
+                    "kultúra", "literatúra", "umenie"
                 ]
             },
             {
                 "name": "product",
                 "key_words": [
                     "výrobky"
+                ]
+            },
+            {
+                "name": "sport",
+                "key_words": [
+                    "šport", "športy"
                 ]
             }
 

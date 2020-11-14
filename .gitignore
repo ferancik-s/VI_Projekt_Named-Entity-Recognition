@@ -1,6 +1,10 @@
 .idea/
-out
 .DS_Store
 Projekt.iml
 files/skwiki.xml
-dictionaries/dictionary_categories_slim.json
+/out/
+/sorted/noredirects.txt
+/sorted/redirects.txt
+/sorted/redirectsMatched.txt
+/files/new.xml
+/files/text.txt

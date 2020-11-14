@@ -1,6 +1,5 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,16 +11,8 @@ public class ParserCategories {
     public static JSONArray categoriesArray;
     public static PrintStream output;
 
-    public static void load_dictionary() {
-        JSONParser parser = new JSONParser();
-        try {
-            categoriesArray = (JSONArray) parser.parse(new FileReader("dictionaries/dictionary_categories_new.json"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    public static String searchMethod = "DFS";
+    final static String searchMethod = "BFS";
     public static int maxDepth = 2;
 
     public static void main(String[] args) throws IOException {
@@ -33,18 +24,19 @@ public class ParserCategories {
         int depth = 0;
         boolean found;
         boolean searched;
+        String redirectTitle = null;
 
-        file = new FileInputStream("files/short.xml");
+        file = new FileInputStream("files/skwiki.xml");
         bufReader = new BufferedReader(new InputStreamReader(file));
 
-        if (searchMethod == "DFS") {
+        if (searchMethod.equals("DFS")) {
             output = new PrintStream(new FileOutputStream("output/outputDFS.txt"));
         }
-        else if (searchMethod == "BFS") {
+        else if (searchMethod.equals("BFS")) {
             output = new PrintStream(new FileOutputStream("output/outputBFS.txt"));
         }
 
-        load_dictionary();
+        categoriesArray = Parser.load_dictionary("dictionaries/dictionary_categories_new.json");
         System.setOut(output);
 
 
@@ -52,7 +44,7 @@ public class ParserCategories {
         //reads file line by line until end
         while (line != null) {
             line = bufReader.readLine();
-            if (line.matches(".*<title>.*(MediaWiki:|Wikipédia:|Kategória:|Pomoc:|Šablóna:|Portál|Main Page|Hlavná stránka).*</title>.*")) {
+            if (line.matches(".*<title>.*(MediaWiki:|Wikipédia:|Kategória:|Pomoc:|Šablóna:|Portál:|Main Page|Hlavná stránka|WP:|Súbor:).*</title>.*")) {
                 while(!line.matches(".*</page>.*")) {
                     line = bufReader.readLine();
                 }
@@ -66,75 +58,74 @@ public class ParserCategories {
                 while (matcher.find()) {
                     output.print(matcher.group(1));
                 }
-                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
+
+                do {
                     line = bufReader.readLine();
-                    if (line.matches(".*#(REDIRECT|redirect|Redirect|presmeruj|Presmeruj|PRESMERUJ).*")) {
+                    if (line.matches("[\\s]*<redirect title=\"(.*)\"[\\s]*/>[\\s]*")) {
+                        pattern = Pattern.compile("[\\s]*<redirect title=\"(.*)\"[\\s]*/>[\\s]*");
+                        matcher = pattern.matcher(line);
+                        while (matcher.find()){
+                            redirectTitle = matcher.group(1);
+                        }
+
                         searched = true;
-                        output.println(" - redirect");
+                        output.println(" - redirect [" + redirectTitle + "]");
                         break;
                     }
-                    if (line.matches(".*\\{\\{(R|r)ozlišovacia stránka}}.*")) {
+                    if (line.matches(".*\\{\\{[Rr]ozlišovacia stránka}}.*")) {
                         searched = true;
                         output.println(" - disambiguation");
                         break;
                     }
-                }
-                while (!line.matches(".*</text.*>.*") && !searched) {
-                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
-                    matcher = pattern.matcher(line);
+                    if (line.matches("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*")) {
+                        pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
+                        matcher = pattern.matcher(line);
 
-                    while (matcher.find()) {
-                        categories.add(matcher.group(1));
-                    }
-                    line = bufReader.readLine();
-                }
-                if (line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*")) {
-                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
-                    matcher = pattern.matcher(line);
-
-                    while (matcher.find()) {
-                        categories.add(matcher.group(1).replaceAll(" ", " "));
-                    }
-                    if (categories.size() < 3) maxDepth = 4;
-                    else maxDepth = 2;
-                }
-
-
-                // DFS
-                if (searchMethod == "DFS") {
-                    for (String category : categories) {
-                        if (!check_category(category)) {
-                            searched = search_categories_DFS(category, depth + 1);
-                            if (searched) break;
-
-                        } else {
-                            output.println(" - " + selectedCategory + selectedSubCategory);
-                            searched = true;
-                            break;
+                        while (matcher.find()) {
+                            categories.add(matcher.group(1));
                         }
                     }
-                    if (!searched) output.println(" - unknown");
-                }
+                } while (!line.matches(".*</text.*>.*"));
 
-                // BFS
-                if (searchMethod == "BFS") {
-                    queue = new ArrayList<>();
-                    found = false;
-                    for (String category : categories) {
-                        if (!check_category(category)) {
-                            queue.add(category);
-                        } else {
-                            output.println(" - " + selectedCategory + selectedSubCategory);
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        for (String cat : queue) {
-                            searched = search_categories_BFS(cat, depth + 1);
-                            if (searched) break;
+                if (categories.size() < 3) maxDepth = 4;
+                else maxDepth = 2;
+
+                if (!searched){
+                    // DFS
+                    if (searchMethod.equals("DFS")) {
+                        for (String category : categories) {
+                            if (!check_category(category)) {
+                                searched = search_categories_DFS(category, depth + 1);
+                                if (searched) break;
+
+                            } else {
+                                output.println(" - " + selectedCategory + selectedSubCategory);
+                                searched = true;
+                                break;
+                            }
                         }
                         if (!searched) output.println(" - unknown");
+                    }
+                    // BFS
+                    else if (searchMethod.equals("BFS")) {
+                        queue = new ArrayList<>();
+                        found = false;
+                        for (String category : categories) {
+                            if (!check_category(category)) {
+                                queue.add(category);
+                            } else {
+                                output.println(" - " + selectedCategory + selectedSubCategory);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            for (String cat : queue) {
+                                searched = search_categories_BFS(cat, depth + 1);
+                                if (searched) break;
+                            }
+                            if (!searched) output.println(" - unknown");
+                        }
                     }
                 }
                 line = bufReader.readLine();
@@ -142,9 +133,6 @@ public class ParserCategories {
         }
     }
 
-
-    public static Pattern pattern;
-    public static Matcher matcher;
     public static String selectedCategory;
     public static String selectedSubCategory;
     public static ArrayList<String> queue;
@@ -160,6 +148,7 @@ public class ParserCategories {
         System.setOut(output);
 
         String line = reader.readLine();
+
         while (line != null) {
             if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
                 line = reader.readLine();
@@ -191,18 +180,18 @@ public class ParserCategories {
         fileCategories = new FileInputStream("files/categories.txt");
         reader = new BufferedReader(new InputStreamReader(fileCategories));
         ArrayList<String> queue;
-        boolean found = false;
+        boolean found;
 
-//        if (depth == 5) {
-//            return false;
-//        }
+        if (depth == 6) {
+            return false;
+        }
 
         String line = reader.readLine();
         while (line != null) {
             if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
                 line = reader.readLine();
                 queue = new ArrayList<>();
-                while (!line.matches(".*NAME:.*") && !found) {
+                while (!line.matches(".*NAME:.*")) {
                     found = check_category(line);
                     if (found) {
                         output.println(" - " + selectedCategory + selectedSubCategory);
@@ -225,6 +214,9 @@ public class ParserCategories {
     }
 
     private static boolean check_category(String string) {
+        Pattern pattern;
+        Matcher matcher;
+
         string = string.toLowerCase();
         for (Object object : categoriesArray){
             JSONObject category = (JSONObject) object;
