@@ -6,22 +6,24 @@ public class SortEntities {
 
     public static void main(String[] args) throws IOException {
 
-        FileInputStream file = new FileInputStream("output/outputBFScomplete.txt");
+        FileInputStream file = new FileInputStream("output/outputBFS.txt");
         PrintStream noredirects = new PrintStream("sorted/noredirects.txt");
         PrintStream redirects = new PrintStream("sorted/redirects.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(file));
 
+        // First splits all entities into named and redirects and labels all disambiguations as unknown
         String line = reader.readLine();
+        long start = System.currentTimeMillis();
+
+        long startTime = System.currentTimeMillis();
+
+        // if is not disambiguation or redirect or MetaPages writes to noredirects
+        // if is redirect writes to redirects
         while (line != null) {
-            if (!line.matches(".*- redirect.*") && !line.matches(".*(Wikipédia:|MediaWiki:|Portál:|Šablóna:|Pomoc:|Kategória:|WP:|Súbor:|Špeciálne:|Hlavná stránka|Main page).*.*")){
-                if (line.matches(".*- disambiguation.*")) {
-                    line = line.replaceAll("disambiguation", "unknown");
-                }
-                line = line.replaceAll("(\\([^)]*\\))[\\s\\]]", "");
+            if (!line.matches(".*\\[disambiguation\\].*") && !line.matches(".*\\[redirect\\].*") && !line.matches(".*(Wikipédia:|MediaWiki:|Portál:|Šablóna:|Pomoc:|Kategória:|WP:|Súbor:|Špeciálne:|Hlavná stránka|Main page).*.*")){
                 noredirects.println(line);
             }
-            if (line.matches(".*- redirect.*") && !line.matches(".*(Wikipédia:|MediaWiki:|Portál:|Šablóna:|Pomoc:|Kategória:|WP:|Súbor:|Špeciálne:|Hlavná stránka|Main page).*.*")) {
-                line = line.replaceAll("(\\([^)]*\\))[\\s\\]]", "");
+            if (line.matches(".*\\[redirect\\].*") && !line.matches(".*(Wikipédia:|MediaWiki:|Portál:|Šablóna:|Pomoc:|Kategória:|WP:|Súbor:|Špeciálne:|Hlavná stránka|Main page).*.*")) {
                 redirects.println(line);
             }
             line = reader.readLine();
@@ -32,9 +34,8 @@ public class SortEntities {
         file.close();
         reader.close();
 
-        System.out.println("done");
-        //TODO: 1. put all redirects into separate file 2. disambiguation subsitute as unknown 3. find categorie for redirects (if possible) 4. remove all unknown categories
-        //
+        System.out.println((float)(System.currentTimeMillis() - start)/1000 + " sec");
+
 
         FileInputStream redirectsInput = new FileInputStream("sorted/redirects.txt");
         FileInputStream noredirectsInput = new FileInputStream("sorted/noredirects.txt");
@@ -51,13 +52,14 @@ public class SortEntities {
 
         String lineInRedirect = redirectReader.readLine();
         while (lineInRedirect != null) {
-            pattern = Pattern.compile("(.*)[\\s]*- redirect[\\s]*\\[(.*)].*");
+            pattern = Pattern.compile("(.*)[\\s]+\\[redirect][\\s]*\\{(.*)\\}.*");
             matcher = pattern.matcher(lineInRedirect);
             while (matcher.find()) {
                 wordRedirectFrom = matcher.group(1);
                 wordRedirectTo = matcher.group(2);
             }
-            wordRedirectTo = wordRedirectTo.replaceAll("(\\(.*\\))", "");
+            wordRedirectTo = wordRedirectTo.replaceAll("(\\()", "\\\\(");
+            wordRedirectTo = wordRedirectTo.replaceAll("(\\))", "\\\\)");
             wordRedirectTo = wordRedirectTo.replaceAll("&#039;", "'");
             wordRedirectTo = wordRedirectTo.replaceAll("(\\+)", "\\\\+");
 
@@ -65,20 +67,20 @@ public class SortEntities {
 
             String lineInNoRedirect = noredirectReader.readLine();
             while (lineInNoRedirect != null) {
-                if (lineInNoRedirect.matches(wordRedirectTo + " -.*")) {
+                if (lineInNoRedirect.matches(wordRedirectTo + " \\[.*")) {
                     break;
                 }
                 lineInNoRedirect = noredirectReader.readLine();
             }
             if (lineInNoRedirect == null) category = "unknown";
             else {
-                pattern = Pattern.compile(".*- (.*)");
+                pattern = Pattern.compile(".*\\[(.*)\\]");
                 matcher = pattern.matcher(lineInNoRedirect);
                 while (matcher.find()) {
                     category = matcher.group(1);
                 }
             }
-            redirectsMatched.println(wordRedirectFrom + "- " + category);
+            redirectsMatched.println(wordRedirectFrom + " [" + category + "]");
 
 
             lineInRedirect = redirectReader.readLine();
@@ -91,5 +93,8 @@ public class SortEntities {
         redirectsMatched.close();
         redirectReader.close();
         noredirectReader.close();
+
+        System.out.println((float)(System.currentTimeMillis() - startTime)/1000 + " sec");
+
     }
 }

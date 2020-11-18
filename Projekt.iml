@@ -8,5 +8,15 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="json-simple-1.1.1" level="project" />
+    <orderEntry type="library" name="core" level="project" />
+    <orderEntry type="library" name="queryparser" level="project" />
+    <orderEntry type="library" name="queries" level="project" />
+    <orderEntry type="library" name="highlighter" level="project" />
+    <orderEntry type="library" name="classification" level="project" />
+    <orderEntry type="library" name="expressions" level="project" />
+    <orderEntry type="library" name="facet" level="project" />
+    <orderEntry type="library" name="grouping" level="project" />
+    <orderEntry type="library" name="join" level="project" />
+    <orderEntry type="library" name="memory" level="project" />
   </component>
 </module>

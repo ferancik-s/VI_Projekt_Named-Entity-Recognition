@@ -3,8 +3,8 @@
 Projekt.iml
 files/skwiki.xml
 /out/
-/sorted/noredirects.txt
-/sorted/redirects.txt
-/sorted/redirectsMatched.txt
+/sorted/
 /files/new.xml
 /files/text.txt
+/output/
+/index/

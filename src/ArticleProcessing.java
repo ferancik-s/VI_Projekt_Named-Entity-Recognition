@@ -1,9 +1,8 @@
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -20,6 +19,8 @@ public class ArticleProcessing {
     public static String title;
 
 
+
+
     public static void main(String[] args) throws IOException {
 
         Pattern pattern;
@@ -28,7 +29,11 @@ public class ArticleProcessing {
         String plainText;
 
         FileInputStream file = new FileInputStream("files/text.txt");
+        FileInputStream dictionary = new FileInputStream("sorted/noredirects.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+
+        BufferedReader readerDictionary = new BufferedReader(new InputStreamReader(dictionary));
+
 
 
 //        Dictionary categoriesDic = new Hashtable();
@@ -69,7 +74,52 @@ public class ArticleProcessing {
             plainText = extract_text(file);
         }
 
-        System.out.println(plainText);
+        ArrayList<String> oneWord = new ArrayList<>();
+        ArrayList<String> twoWord = new ArrayList<>();
+        ArrayList<String> threeWord = new ArrayList<>();
+        ArrayList<String> fourWord = new ArrayList<>();
+
+
+        String[] splitted = plainText.split(" ");
+
+        for (int i = 0; i < splitted.length; i++) {
+            splitted[i] = splitted[i].replaceAll("[,.?!()\"]", "");
+        }
+        oneWord.addAll(Arrays.asList(splitted));
+
+        for (int i = 0; i < splitted.length - 1; i++) {
+            twoWord.add(splitted[i] + " " + splitted[i+1]);
+        }
+
+        for (int i = 0; i < splitted.length - 2; i++) {
+            threeWord.add(splitted[i] + " " + splitted[i+1] + " " + splitted[i+2]);
+        }
+
+        for (int i = 0; i < splitted.length - 3; i++) {
+            fourWord.add(splitted[i] + " " + splitted[i+1] + " " + splitted[i+2] + " " + splitted[i+3]);
+        }
+
+        System.out.println("ok");
+
+
+        // checks ocurrances in four word groups
+        for (int i = 0; i < fourWord.size(); i++) {
+            String entity_category = readerDictionary.readLine();
+            while (entity_category != null) {
+                String entity = entity_category.split("( - (organization|person|location|non-entity|miscellaneous|time))")[0];
+                entity = entity.replaceAll("\\+", "\\\\+");
+                entity = entity.replaceAll("\\)", "\\\\)");
+                entity = entity.replaceAll("\\(", "\\\\(");
+                entity = entity.replaceAll("\\*", "\\\\*");
+                if (fourWord.get(i).matches(".*" + entity + ".*")) {
+                    System.out.println(entity_category);
+                }
+                entity_category = readerDictionary.readLine();
+            }
+            dictionary.getChannel().position(0);
+            readerDictionary = new BufferedReader(new InputStreamReader(dictionary));
+        }
+
     }
 
     public static String extract_text_from_wiki(FileInputStream file) throws IOException {
@@ -115,7 +165,6 @@ public class ArticleProcessing {
             text = text.replaceAll("(&lt;)", "<");
             text = text.replaceAll("(&gt;)", ">");
 
-            text = "";
             while (!line.matches(".*</page>.*")) {
                 line = reader.readLine();
             }
