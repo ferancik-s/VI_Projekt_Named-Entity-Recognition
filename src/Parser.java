@@ -25,34 +25,35 @@ public class Parser {
     final static String TEXT = ".*<text.*>.*";
     final static String TEXTEND = ".*</text.*>.*";
 
+    public static ArrayList<String> categoriesList;
+
     public static Article article = new Article();
 
     public static boolean isReference = false;
+    public static final int TRESHOLD = 50;
     public static int totalMatches = 0;
     public static String categoryString;
 
 
     final static int numberOfCategories = 5;
     public static int[] categoriesCount = new int[numberOfCategories];
-    final static String[] categoriesNames = {
+    public static String[] categoriesNames = {
             "location","organization","person","miscellaneous",
             "non-entity"
     };
 
-    public static PrintStream matched;
-
-    public static JSONArray load_dictionary(String name) {
+    public static JSONArray load_dictionary() {
         JSONParser parser = new JSONParser();
         JSONArray categoriesArray = null;
         try {
-            categoriesArray = (JSONArray) parser.parse(new FileReader(name));
+            categoriesArray = (JSONArray) parser.parse(new FileReader("dictionaries/dictionary_categories_slim.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return categoriesArray;
     }
 
-    public static void find_category_keyword(JSONArray categoriesArray, String line) {
+    public static void find_category_keyword(JSONArray categoriesArray, String line, String partOfText) {
         Pattern pattern;
         Matcher matcher;
 
@@ -93,8 +94,12 @@ public class Parser {
         }
     }
 
+    public static PrintStream matched;
+
+
     public static void match_category() {
         System.setOut(matched);
+
 
         if (article.getCategoryFromInfobox() == null && article.getCategoryFromAbstract() == null && article.getCategoryFromArticle() == null) {
             matched.print(article.getTitle());
@@ -154,12 +159,12 @@ public class Parser {
         return false;
     }
 
-    public static void skip_reference(String line, BufferedReader bufReader, JSONArray categoriesArray) throws IOException {
+    public static void skip_reference(String line, BufferedReader bufReader, JSONArray categoriesArray, String partOfText) throws IOException {
         while (!line.matches(".*&lt;/ref&gt;.*")) {
             line = bufReader.readLine();
         }
         isReference = false;
-        find_category_keyword(categoriesArray, line);
+        find_category_keyword(categoriesArray, line, partOfText);
     }
 
 
@@ -172,7 +177,7 @@ public class Parser {
         boolean inPage = false;
 
         try {
-            JSONArray categoriesArray = load_dictionary("dictionaries/dictionary_categories_slim.json");
+            JSONArray categoriesArray = load_dictionary();
 
             matched = new PrintStream(new FileOutputStream("output/outputFULLTEXT.txt"));
 
@@ -226,16 +231,16 @@ public class Parser {
                             while (!line.matches(PAGE_END)) {
 
                                 if (line.matches(INFOBOX) || line.matches(GEOBOX)){
-                                    pattern = Pattern.compile(".*\\{\\{(Infobox|Geobox\\s*[|])\\s*([ÁA-Za-zÇ-ž0-9,.:()!?-_'\"\\s]*)[|]?");
+                                    pattern = Pattern.compile(".*\\{\\{(Infobox|Geobox\\s*[|]{1})\\s*([ÁA-Za-zÇ-ž0-9,.:()!?-_'\"\\s]*)(|)?");
                                     matcher = pattern.matcher(line);
                                     if (article.getMainCategory() == null) {
                                         article.setMainCategory((matcher.find() ? matcher.group(2) : null));
                                     }
 
                                     while (!line.matches(ENDBOX)) {
-                                        find_category_keyword(categoriesArray, line);
+                                        find_category_keyword(categoriesArray, line, "infobox");
                                         if (isReference) {
-                                            skip_reference(line, bufReader, categoriesArray);
+                                            skip_reference(line, bufReader, categoriesArray, "infobox");
                                         }
                                         line = bufReader.readLine();
                                     }
@@ -254,9 +259,9 @@ public class Parser {
                                 }
                                 if (line.matches(ABSTRACT)) {
                                     while (!line.matches("") && !line.matches(".*\\{\\{.*}}.*")) {
-                                        find_category_keyword(categoriesArray, line);
+                                        find_category_keyword(categoriesArray, line, "abstract");
                                         if (isReference) {
-                                            skip_reference(line, bufReader, categoriesArray);
+                                            skip_reference(line, bufReader, categoriesArray, "abstract");
                                         }
                                         line = bufReader.readLine();
                                     }
@@ -269,7 +274,7 @@ public class Parser {
                                         }
                                     }
                                 }
-                                if (line.matches(".*\\{\\{[Rr]ozlišovacia stránka}}.*")) {
+                                if (line.matches(".*\\{\\{(R|r)ozlišovacia stránka}}.*")) {
                                     matched.println(article.getTitle() + " - disambiguation");
                                     while (!line.matches(PAGE_END)) {
                                         line = bufReader.readLine();
@@ -279,9 +284,9 @@ public class Parser {
                                 if (line.matches(ARTICLE)) {
 
                                     while (!line.matches(TEXTEND)) {
-                                        find_category_keyword(categoriesArray, line);
+                                        find_category_keyword(categoriesArray, line, "article");
                                         if (isReference) {
-                                            skip_reference(line, bufReader, categoriesArray);
+                                            skip_reference(line, bufReader, categoriesArray, "article");
                                         }
                                         line = bufReader.readLine();
                                     }
@@ -294,7 +299,7 @@ public class Parser {
                                         }
                                     }
                                 }
-                                if (line.matches(".*\\{\\{[Rr]ozlišovacia stránka}}.*")) {
+                                if (line.matches(".*\\{\\{(R|r)ozlišovacia stránka}}.*")) {
                                     matched.println(article.getTitle() + " - disambiguation");
                                     while (!line.matches(PAGE_END)) {
                                         line = bufReader.readLine();

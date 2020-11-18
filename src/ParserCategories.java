@@ -1,5 +1,6 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,8 +13,16 @@ public class ParserCategories {
     public static JSONArray categoriesArray;
     public static PrintStream output;
 
+    public static void load_dictionary() {
+        JSONParser parser = new JSONParser();
+        try {
+            categoriesArray = (JSONArray) parser.parse(new FileReader("dictionaries/dictionary_categories_new.json"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    final static String searchMethod = "BFS";
+    public static String searchMethod = "DFS";
     public static int maxDepth = 2;
     public static String title = "";
 
@@ -26,19 +35,23 @@ public class ParserCategories {
         int depth = 0;
         boolean found;
         boolean searched;
-        String redirectTitle = null;
 
-        file = new FileInputStream("files/skwiki.xml");
+        file = new FileInputStream("files/short.xml");
         bufReader = new BufferedReader(new InputStreamReader(file));
 
-        if (searchMethod.equals("DFS")) {
+        if (searchMethod == "DFS") {
             output = new PrintStream(new FileOutputStream("output/outputDFS.txt"));
         }
-        else if (searchMethod.equals("BFS")) {
+        else if (searchMethod == "BFS") {
             output = new PrintStream(new FileOutputStream("output/outputBFS.txt"));
         }
 
+<<<<<<< HEAD
         categoriesArray = Parser.load_dictionary("dictionaries/dictionary_categories_new.json");
+=======
+        load_dictionary();
+        System.setOut(output);
+>>>>>>> parent of 4340e13... redirect categories extraction && testing recognizing entities in text
 
         // cca 9707.585 sec
         // execution time counter
@@ -47,9 +60,14 @@ public class ParserCategories {
         String line = bufReader.readLine();
         //reads file line by line until end
         while (line != null) {
+<<<<<<< HEAD
 
             // skips lines which contains not important articles right at the beginning of page
             if (line.matches(".*<title>.*(MediaWiki:|Wikipédia:|Kategória:|Pomoc:|Šablóna:|Portál:|Main Page|Hlavná stránka|WP:|Súbor:|Špeciálne:).*</title>.*")) {
+=======
+            line = bufReader.readLine();
+            if (line.matches(".*<title>.*(MediaWiki:|Wikipédia:|Kategória:|Pomoc:|Šablóna:|Portál|Main Page|Hlavná stránka).*</title>.*")) {
+>>>>>>> parent of 4340e13... redirect categories extraction && testing recognizing entities in text
                 while(!line.matches(".*</page>.*")) {
                     line = bufReader.readLine();
                 }
@@ -102,6 +120,7 @@ public class ParserCategories {
                     searched = true;
                     output.println(title + " [time (day)]");
                 }
+<<<<<<< HEAD
 
 
 
@@ -180,7 +199,77 @@ public class ParserCategories {
                                 if (searched) break;
                             }
                             if (!searched) output.println(title + " [unknown]");
+=======
+                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
+                    line = bufReader.readLine();
+                    if (line.matches(".*#(REDIRECT|redirect|Redirect|presmeruj|Presmeruj|PRESMERUJ).*")) {
+                        searched = true;
+                        output.println(" - redirect");
+                        break;
+                    }
+                    if (line.matches(".*\\{\\{(R|r)ozlišovacia stránka}}.*")) {
+                        searched = true;
+                        output.println(" - disambiguation");
+                        break;
+                    }
+                }
+                while (!line.matches(".*</text.*>.*") && !searched) {
+                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
+                    matcher = pattern.matcher(line);
+
+                    while (matcher.find()) {
+                        categories.add(matcher.group(1));
+                    }
+                    line = bufReader.readLine();
+                }
+                if (line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*")) {
+                    pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
+                    matcher = pattern.matcher(line);
+
+                    while (matcher.find()) {
+                        categories.add(matcher.group(1).replaceAll(" ", " "));
+                    }
+                    if (categories.size() < 3) maxDepth = 4;
+                    else maxDepth = 2;
+                }
+
+
+                // DFS
+                if (searchMethod == "DFS") {
+                    for (String category : categories) {
+                        if (!check_category(category)) {
+                            searched = search_categories_DFS(category, depth + 1);
+                            if (searched) break;
+
+                        } else {
+                            output.println(" - " + selectedCategory + selectedSubCategory);
+                            searched = true;
+                            break;
                         }
+                    }
+                    if (!searched) output.println(" - unknown");
+                }
+
+                // BFS
+                if (searchMethod == "BFS") {
+                    queue = new ArrayList<>();
+                    found = false;
+                    for (String category : categories) {
+                        if (!check_category(category)) {
+                            queue.add(category);
+                        } else {
+                            output.println(" - " + selectedCategory + selectedSubCategory);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        for (String cat : queue) {
+                            searched = search_categories_BFS(cat, depth + 1);
+                            if (searched) break;
+>>>>>>> parent of 4340e13... redirect categories extraction && testing recognizing entities in text
+                        }
+                        if (!searched) output.println(" - unknown");
                     }
                 }
             }
@@ -190,6 +279,9 @@ public class ParserCategories {
 
     }
 
+
+    public static Pattern pattern;
+    public static Matcher matcher;
     public static String selectedCategory;
     public static String selectedSubCategory;
     public static ArrayList<String> queue;
@@ -204,7 +296,6 @@ public class ParserCategories {
 
 
         String line = reader.readLine();
-
         while (line != null) {
             if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
                 line = reader.readLine();
@@ -236,18 +327,24 @@ public class ParserCategories {
         fileCategories = new FileInputStream("files/categories.txt");
         reader = new BufferedReader(new InputStreamReader(fileCategories));
         ArrayList<String> queue;
-        boolean found;
+        boolean found = false;
 
+<<<<<<< HEAD
         if (depth == 10) {
             return false;
         }
+=======
+//        if (depth == 5) {
+//            return false;
+//        }
+>>>>>>> parent of 4340e13... redirect categories extraction && testing recognizing entities in text
 
         String line = reader.readLine();
         while (line != null) {
             if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
                 line = reader.readLine();
                 queue = new ArrayList<>();
-                while (!line.matches(".*NAME:.*")) {
+                while (!line.matches(".*NAME:.*") && !found) {
                     found = check_category(line);
                     if (found) {
                         output.println(title + " [" + selectedCategory + selectedSubCategory + "]");
@@ -270,9 +367,6 @@ public class ParserCategories {
     }
 
     private static boolean check_category(String string) {
-        Pattern pattern;
-        Matcher matcher;
-
         string = string.toLowerCase();
         // first searches for the general category
         for (Object object : categoriesArray){
