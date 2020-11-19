@@ -38,61 +38,33 @@ public class SortEntities {
 
 
         FileInputStream redirectsInput = new FileInputStream("sorted/redirects.txt");
-        FileInputStream noredirectsInput = new FileInputStream("sorted/noredirects.txt");
         PrintStream redirectsMatched = new PrintStream("sorted/redirectsMatched.txt");
         BufferedReader redirectReader = new BufferedReader(new InputStreamReader(redirectsInput));
-        BufferedReader noredirectReader = new BufferedReader(new InputStreamReader(noredirectsInput));
-
-        Pattern pattern;
-        Matcher matcher;
 
         String wordRedirectTo = "";
         String wordRedirectFrom = "";
-        String category = "";
 
         String lineInRedirect = redirectReader.readLine();
         while (lineInRedirect != null) {
-            pattern = Pattern.compile("(.*)[\\s]+\\[redirect][\\s]*\\{(.*)\\}.*");
-            matcher = pattern.matcher(lineInRedirect);
+            Pattern pattern = Pattern.compile("(.*)[\\s]+\\[redirect][\\s]*\\{(.*)\\}.*");
+            Matcher matcher = pattern.matcher(lineInRedirect);
             while (matcher.find()) {
                 wordRedirectFrom = matcher.group(1);
                 wordRedirectTo = matcher.group(2);
             }
-            wordRedirectTo = wordRedirectTo.replaceAll("(\\()", "\\\\(");
-            wordRedirectTo = wordRedirectTo.replaceAll("(\\))", "\\\\)");
-            wordRedirectTo = wordRedirectTo.replaceAll("&#039;", "'");
-            wordRedirectTo = wordRedirectTo.replaceAll("(\\+)", "\\\\+");
 
 
+            wordRedirectTo = "\"" + wordRedirectTo.replaceAll("[ \\s]+", " ") + "\"";
 
-            String lineInNoRedirect = noredirectReader.readLine();
-            while (lineInNoRedirect != null) {
-                if (lineInNoRedirect.matches(wordRedirectTo + " \\[.*")) {
-                    break;
-                }
-                lineInNoRedirect = noredirectReader.readLine();
-            }
-            if (lineInNoRedirect == null) category = "unknown";
-            else {
-                pattern = Pattern.compile(".*\\[(.*)\\]");
-                matcher = pattern.matcher(lineInNoRedirect);
-                while (matcher.find()) {
-                    category = matcher.group(1);
-                }
-            }
+            String category = Indexer.searchEntityDictionary(wordRedirectTo);
+
             redirectsMatched.println(wordRedirectFrom + " [" + category + "]");
 
-
             lineInRedirect = redirectReader.readLine();
-
-            noredirectsInput.getChannel().position(0);
-            noredirectReader = new BufferedReader(new InputStreamReader(noredirectsInput));
         }
         redirectsInput.close();
-        noredirectsInput.close();
         redirectsMatched.close();
         redirectReader.close();
-        noredirectReader.close();
 
         System.out.println((float)(System.currentTimeMillis() - startTime)/1000 + " sec");
 

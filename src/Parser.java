@@ -41,16 +41,7 @@ public class Parser {
 
     public static PrintStream matched;
 
-    public static JSONArray load_dictionary(String name) {
-        JSONParser parser = new JSONParser();
-        JSONArray categoriesArray = null;
-        try {
-            categoriesArray = (JSONArray) parser.parse(new FileReader(name));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return categoriesArray;
-    }
+
 
     public static void find_category_keyword(JSONArray categoriesArray, String line) {
         Pattern pattern;
@@ -172,7 +163,7 @@ public class Parser {
         boolean inPage = false;
 
         try {
-            JSONArray categoriesArray = load_dictionary("dictionaries/dictionary_categories_slim.json");
+            JSONArray categoriesArray = ParserCategories.load_dictionary("dictionaries/dictionary_categories_slim.json");
 
             matched = new PrintStream(new FileOutputStream("output/outputFULLTEXT.txt"));
 

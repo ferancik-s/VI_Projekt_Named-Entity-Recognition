@@ -1,5 +1,6 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,6 +17,18 @@ public class ParserCategories {
     final static String searchMethod = "BFS";
     public static int maxDepth = 2;
     public static String title = "";
+
+
+    public static JSONArray load_dictionary(String name) {
+        JSONParser parser = new JSONParser();
+        JSONArray categoriesArray = null;
+        try {
+            categoriesArray = (JSONArray) parser.parse(new FileReader(name));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categoriesArray;
+    }
 
     public static void main(String[] args) throws IOException {
         FileInputStream file;
@@ -38,7 +51,7 @@ public class ParserCategories {
             output = new PrintStream(new FileOutputStream("output/outputBFS.txt"));
         }
 
-        categoriesArray = Parser.load_dictionary("dictionaries/dictionary_categories_new.json");
+        categoriesArray = load_dictionary("dictionaries/dictionary_categories_new.json");
 
         // cca 9707.585 sec
         // execution time counter
@@ -126,8 +139,8 @@ public class ParserCategories {
                             break;
                         }
                         // finally if article is not redirect or disambiguation it collects all categories
-                        if (line.matches("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*")) {
-                            pattern = Pattern.compile("\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
+                        if (line.matches("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|])?([\\s\\]]*)(</text>)?")) {
+                            pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
                             matcher = pattern.matcher(line);
 
                             while (matcher.find()) {
@@ -197,75 +210,54 @@ public class ParserCategories {
 
     private static boolean search_categories_DFS(String category, int depth) throws IOException {
 
-        FileInputStream fileCategories;
-        BufferedReader reader;
-        fileCategories = new FileInputStream("files/categories.txt");
-        reader = new BufferedReader(new InputStreamReader(fileCategories));
+        String searchedCategory = category.replaceAll("[ \\s]+", " ");
+        searchedCategory = searchedCategory.replaceAll(" ", " && ");
+        ArrayList<String> categoriesArray = Indexer.searchCategoriesTree(searchedCategory);
 
+        if (depth == maxDepth || categoriesArray == null) {
+            return false;
+        }
 
-        String line = reader.readLine();
-
-        while (line != null) {
-            if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
-                line = reader.readLine();
-                while (!line.matches(".*NAME:.*")) {
-                    if (!check_category(line)) {
-                        if (depth < maxDepth && search_categories_DFS(line.replaceAll(" ", " "), depth+1)) {
-                            return true;
-                        }
-                    }
-                    else {
-                        output.println(title + " [" + selectedCategory + selectedSubCategory + "]");
-                        return true;
-                    }
-                    line = reader.readLine();
-                }
-                if (line.matches(".*NAME:.*")){
-                    return false;
+        for (String cat: categoriesArray) {
+            if (!check_category(cat)) {
+                if(search_categories_DFS(cat, depth + 1)) {
+                    return true;
                 }
             }
-            line = reader.readLine();
+            else {
+                output.println(title + " [" + selectedCategory + selectedSubCategory + "]");
+                return true;
+            }
         }
         return false;
     }
 
-    private static boolean search_categories_BFS(String category, int depth) throws IOException {
+    private static boolean search_categories_BFS(String category, int depth) {
 
-        FileInputStream fileCategories;
-        BufferedReader reader;
-        fileCategories = new FileInputStream("files/categories.txt");
-        reader = new BufferedReader(new InputStreamReader(fileCategories));
-        ArrayList<String> queue;
+        ArrayList<String> queue = new ArrayList<>();
         boolean found;
 
-        if (depth == 10) {
+        String searchedCategory = "\"" + category.replaceAll("[ \\s]+", " ") + "\"";
+        ArrayList<String> categoriesArray = Indexer.searchCategoriesTree(searchedCategory);
+
+
+        if (depth == 10 || categoriesArray == null) {
             return false;
         }
 
-        String line = reader.readLine();
-        while (line != null) {
-            if (line.equals("NAME: " + category.replaceAll(" ", " "))) {
-                line = reader.readLine();
-                queue = new ArrayList<>();
-                while (!line.matches(".*NAME:.*")) {
-                    found = check_category(line);
-                    if (found) {
-                        output.println(title + " [" + selectedCategory + selectedSubCategory + "]");
-                        return true;
-                    }
-                    queue.add(line.replaceAll(" ", " "));
-                    line = reader.readLine();
-                }
-                for (String cat : queue) {
-                    if (search_categories_BFS(cat, depth + 1)) {
-                        return true;
-                    }
-                }
-                return false;
+        for (String cat: categoriesArray) {
+            found = check_category(cat);
+            if (found) {
+                output.println(title + " [" + selectedCategory + selectedSubCategory + "]");
+                return true;
             }
-            line = reader.readLine();
+            queue.add(cat);
         }
-
+        for (String cat: queue) {
+            if (search_categories_BFS(cat, depth + 1)) {
+                return true;
+            }
+        }
         return false;
     }
 

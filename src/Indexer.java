@@ -61,17 +61,14 @@ public class Indexer {
                     while (matcher.find()) {
                         mainCategory = matcher.group(1);
                     }
-                    ArrayList<Object> categoryArray = new ArrayList<>();
-                    ArrayList<Object> subcategoriesArray = new ArrayList<>();
-                    categoryArray.add(mainCategory);
+                    ArrayList<String> subcategoriesArray = new ArrayList<>();
                     line = reader.readLine();
                     while (line != null && !line.matches("NAME: .*")){
                         subcategoriesArray.add(line);
                         line = reader.readLine();
                     }
-                    categoryArray.add(subcategoriesArray);
                     doc.add(new TextField("mainCategory", mainCategory.toLowerCase(), Field.Store.YES));
-                    doc.add(new StoredField("categories", serialize(categoryArray)));
+                    doc.add(new StoredField("categories", serialize(subcategoriesArray)));
                     writer.addDocument(doc);
                 }
             }
@@ -84,10 +81,10 @@ public class Indexer {
         }
     }
 
-    public static void searchCategoriesTree(String word) {
+    public static ArrayList<String> searchCategoriesTree(String word) {
         String index = "index/categories";
+        ArrayList<String> categories = null;
 
-        int hitsPerPage = 10;
         try {
             IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
             IndexSearcher searcher = new IndexSearcher(reader);
@@ -95,27 +92,23 @@ public class Indexer {
             QueryParser parser = new QueryParser("mainCategory", analyzer);
 
             Query query = parser.parse(word);
-            System.out.println("Searching for: " + query.toString("mainCategory"));
 
-            TopDocs results = searcher.search(query, hitsPerPage);
+            TopDocs results = searcher.search(query, 1);
             ScoreDoc[] hits = results.scoreDocs;
 
             for (ScoreDoc scoreDoc : hits) {
                 Document doc = searcher.doc(scoreDoc.doc);
-                String mainCategory = doc.get("mainCategory");
-                ArrayList<Object> categories = (ArrayList<Object>) unserialize(doc.getBinaryValue("categories").bytes);
-                System.out.println("mainCategory: " + mainCategory + " category: " + categories);
+                categories = (ArrayList<String>) unserialize(doc.getBinaryValue("categories").bytes);
             }
-            System.out.println();
-
             reader.close();
         } catch (Exception e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
         }
+        return categories;
     }
 
     public static void indexEntityDictionary() throws IOException {
-        FileInputStream file = new FileInputStream("sorted/noredirects.txt");
+        FileInputStream file = new FileInputStream("output/outputBFS.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(file));
 
         // directory where index files are stored
@@ -131,7 +124,6 @@ public class Indexer {
             IndexWriter writer = new IndexWriter(dir, iwc);
 
             String line = reader.readLine();
-            int counter = 1;
             Pattern pattern;
             Matcher matcher;
             String entity = "";
@@ -144,16 +136,13 @@ public class Indexer {
                     entity = matcher.group(1);
                     category = matcher.group(2);
                 }
-                ArrayList<Object> someList = new ArrayList<>();
-                someList.add(entity + " => " + category);
-                someList.add(counter);
+                //ArrayList<Object> someList = new ArrayList<>();
+                //someList.add(category);
 
                 doc.add(new TextField("entity", entity.toLowerCase(), Field.Store.YES));
                 doc.add(new TextField("category", category, Field.Store.YES));
-                doc.add(new StringField("lineNumber", String.valueOf(counter), Field.Store.YES));
-                doc.add(new StoredField("list", serialize(someList)));
+                //doc.add(new StoredField("categoryString", serialize(category)));
                 writer.addDocument(doc);
-                counter++;
                 line = reader.readLine();
             }
 
@@ -163,9 +152,9 @@ public class Indexer {
         }
     }
 
-    public static void searchEntityDictionary(String word) {
+    public static String searchEntityDictionary(String word) {
         String index = "index/dictionary";
-        int hitsPerPage = 10;
+        String category = null;
         try {
             IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
             IndexSearcher searcher = new IndexSearcher(reader);
@@ -174,30 +163,26 @@ public class Indexer {
             QueryParser parser = new QueryParser("entity", analyzer);
 
             Query query = parser.parse(word);
-            System.out.println("Searching for: " + query.toString("entity"));
 
-            TopDocs results = searcher.search(query, hitsPerPage);
+            TopDocs results = searcher.search(query, 1);
             ScoreDoc[] hits = results.scoreDocs;
+
 
             for (ScoreDoc scoreDoc : hits) {
                 Document doc = searcher.doc(scoreDoc.doc);
-                String entity = doc.get("entity");
-                String category = doc.get("category");
-                String lineNumber = doc.get("lineNumber");
-                ArrayList<Object> list = (ArrayList<Object>) unserialize(doc.getBinaryValue("list").bytes);
-                System.out.println("lineNumber: " + lineNumber + " entity: " + entity + " category: " + category + " list: " + list);
+                category = doc.get("category");
             }
-            System.out.println();
 
             reader.close();
         } catch (Exception e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
         }
+        return category;
     }
 
     public static void main(String[] args) throws IOException {
-        //indexCategoriesTree();
-        searchCategoriesTree("Slnečná && sústava");
+        indexEntityDictionary();
+        searchEntityDictionary("Bologna");
     }
 
 

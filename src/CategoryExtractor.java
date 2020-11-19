@@ -26,11 +26,11 @@ public class CategoryExtractor {
                 while (matcher.find()) {
                     categories.println("NAME: " + matcher.group(1).replaceAll(" ", " "));
                 }
-                while (!line.matches(".*\\[\\[Kategória:([ÁA-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
+                while (!line.matches("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
                     line = bufReader.readLine();
                 }
                 while (!line.matches(".*</text.*>.*")) {
-                        pattern = Pattern.compile("\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
+                        pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
                         matcher = pattern.matcher(line);
 
                         while (matcher.find()) {
@@ -38,8 +38,8 @@ public class CategoryExtractor {
                         }
                         line = bufReader.readLine();
                 }
-                if (line.matches(".*\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*")) {
-                    pattern = Pattern.compile("\\[\\[Kategória:([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
+                if (line.matches("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*")) {
+                    pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
                     matcher = pattern.matcher(line);
 
                     while (matcher.find()) {

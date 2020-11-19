@@ -63,7 +63,7 @@
     {
         "name": "miscellaneous",
         "key_words": [
-            "dejiny", "história", "literatúra", "výrobky", "národnosti", "kultúra", "jazyk", "jazyky"
+            "dejiny", "história", "literatúra", "výrobky", "národnosti", "kultúra", "jazyk", "jazyky", "umenie", "umenia"
         ],
         "subcategory": [
             {
@@ -87,7 +87,7 @@
             {
                 "name": "workOfArt",
                 "key_words": [
-                    "kultúra", "literatúra"
+                    "kultúra", "literatúra", "umenie", "umenia"
                 ]
             },
             {
@@ -102,7 +102,7 @@
     {
         "name": "non-entity",
         "key_words": [
-            "veda", "vedy", "znalosti", "zoznamy", "čas", "symboly"
+            "veda", "znalosti", "zoznamy", "čas", "symboly"
         ],
         "subcategory": [
 
