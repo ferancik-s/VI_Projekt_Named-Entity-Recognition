@@ -12,7 +12,9 @@ public class ArticleProcessing {
     final static String TITLE = ".*<title>(.*)</title>.*";
     final static String PAGE_END = ".*</page>.*";
     final static String TEXT = ".*<text.*>.*";
-    final static String TEXTEND = ".*</text.*>.*";
+
+    final static String NOUN = "(S[SFU]|Q)";
+    final static String ADJECTIVE = "(A[SAFU]|S[A])";
 
     final static String typeOfText = "regular";
 
@@ -23,50 +25,9 @@ public class ArticleProcessing {
 
     public static void main(String[] args) throws IOException {
 
-        Pattern pattern;
-        Matcher matcher;
+        FileInputStream file = new FileInputStream("files/text.txt");
 
         String plainText;
-
-        FileInputStream file = new FileInputStream("files/text.txt");
-        FileInputStream dictionary = new FileInputStream("sorted/noredirects.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(file));
-
-        BufferedReader readerDictionary = new BufferedReader(new InputStreamReader(dictionary));
-
-
-
-//        Dictionary categoriesDic = new Hashtable();
-//
-//        String riadok = reader.readLine();
-//        int counter = 1;
-//        while (riadok != null) {
-//            if (riadok.matches("NAME: .*")) {
-//                categoriesDic.put(riadok, counter);
-//            }
-//            riadok = reader.readLine();
-//            counter++;
-//        }
-
-
-
-//        int n = 210000; // The line number
-//        String riadok;
-//        try (Stream<String> lines = Files.lines(Paths.get("files/categories.txt"))) {
-//            riadok = lines.skip(n).findFirst().get();
-//            System.out.println(riadok);
-//        }
-//        catch(IOException e){
-//            System.out.println(e);
-//        }
-//
-//        int count = 0;
-//        while (count != 210000) {
-//            reader.readLine();
-//            count++;
-//        }
-//        System.out.println(reader.readLine());
-
         if (typeOfText == "wikipedia") {
             plainText = extract_text_from_wiki(file);
         }
@@ -74,51 +35,87 @@ public class ArticleProcessing {
             plainText = extract_text(file);
         }
 
+
+        ArrayList<String> nouns_adjectives = new ArrayList<>();
         ArrayList<String> oneWord = new ArrayList<>();
         ArrayList<String> twoWord = new ArrayList<>();
         ArrayList<String> threeWord = new ArrayList<>();
-        ArrayList<String> fourWord = new ArrayList<>();
 
+        plainText = plainText.replaceAll("[,.;:?!()\"]", "");
+        String[] split = plainText.split("[\\s]");
 
-        String[] splitted = plainText.split(" ");
-
-        for (int i = 0; i < splitted.length; i++) {
-            splitted[i] = splitted[i].replaceAll("[,.?!()\"]", "");
-        }
-        oneWord.addAll(Arrays.asList(splitted));
-
-        for (int i = 0; i < splitted.length - 1; i++) {
-            twoWord.add(splitted[i] + " " + splitted[i+1]);
-        }
-
-        for (int i = 0; i < splitted.length - 2; i++) {
-            threeWord.add(splitted[i] + " " + splitted[i+1] + " " + splitted[i+2]);
-        }
-
-        for (int i = 0; i < splitted.length - 3; i++) {
-            fourWord.add(splitted[i] + " " + splitted[i+1] + " " + splitted[i+2] + " " + splitted[i+3]);
-        }
-
-        System.out.println("ok");
-
-
-        // checks ocurrances in four word groups
-        for (int i = 0; i < fourWord.size(); i++) {
-            String entity_category = readerDictionary.readLine();
-            while (entity_category != null) {
-                String entity = entity_category.split("( - (organization|person|location|non-entity|miscellaneous|time))")[0];
-                entity = entity.replaceAll("\\+", "\\\\+");
-                entity = entity.replaceAll("\\)", "\\\\)");
-                entity = entity.replaceAll("\\(", "\\\\(");
-                entity = entity.replaceAll("\\*", "\\\\*");
-                if (fourWord.get(i).matches(".*" + entity + ".*")) {
-                    System.out.println(entity_category);
-                }
-                entity_category = readerDictionary.readLine();
+        for (String item : split) {
+            String[] found = Lemmatizer.searchLemma(item);
+            if (found[1].matches("([SA][SAFU]|Q)") || Character.isUpperCase(item.charAt(0))) {
+                nouns_adjectives.add(item);
             }
-            dictionary.getChannel().position(0);
-            readerDictionary = new BufferedReader(new InputStreamReader(dictionary));
         }
+
+
+        for (int i = 0; i < nouns_adjectives.size(); i++) {
+            String[] found = Lemmatizer.searchLemma(nouns_adjectives.get(i));
+            String[] found1;
+            String[] found2;
+
+            if (found[1].matches(NOUN) && Character.isUpperCase(found[0].charAt(0))) {
+                if (!oneWord.contains(found[0])) oneWord.add(found[0]);
+            }
+            else if (Character.isUpperCase(nouns_adjectives.get(i).charAt(0))) {
+                if (!oneWord.contains(nouns_adjectives.get(i))) oneWord.add(nouns_adjectives.get(i));
+            }
+
+            if (i + 1 < nouns_adjectives.size()){
+                found1 = Lemmatizer.searchLemma(nouns_adjectives.get(i+1));
+                if (found[1].matches(ADJECTIVE) && found1[1].matches(NOUN)){
+                    //twoWord.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1));
+                    twoWord.add(found[0] + " " + found1[0]);
+                }
+                else if (Character.isUpperCase(nouns_adjectives.get(i).charAt(0)) && Character.isUpperCase(nouns_adjectives.get(i + 1).charAt(0))) {
+                    twoWord.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1));
+                    //twoWord.add(found[0] + " " + found1[0]);
+                }
+            }
+            if (i + 2 < nouns_adjectives.size()){
+                found1 = Lemmatizer.searchLemma(nouns_adjectives.get(i+1));
+                found2 = Lemmatizer.searchLemma(nouns_adjectives.get(i+2));
+                if (found[1].matches(ADJECTIVE) && found1[1].matches(ADJECTIVE) && found2[1].matches(NOUN))
+                    //threeWord.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1) + " " + nouns_adjectives.get(i+2));
+                    threeWord.add(found[0] + " " + found1[0] + " " + found2[0]);
+                else if (Character.isUpperCase(nouns_adjectives.get(i).charAt(0)) && Character.isUpperCase(nouns_adjectives.get(i + 1).charAt(0)) && Character.isUpperCase(nouns_adjectives.get(i + 2).charAt(0))) {
+                    threeWord.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1) + " " + nouns_adjectives.get(i+2));
+                    //threeWord.add(found[0] + " " + found1[0] + " " + found2[0]);
+                }
+                else if (found[1].matches(ADJECTIVE) && found1[1].matches(NOUN) && found2[1].matches(NOUN) && Character.isUpperCase(nouns_adjectives.get(i + 2).charAt(0))) {
+                    //threeWord.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1) + " " + nouns_adjectives.get(i+2));
+                    threeWord.add(found[0] + " " + found1[0] + " " + found2[0]);
+                }
+            }
+        }
+
+
+        ArrayList<String> toBePrinted;
+        for (String s : oneWord) {
+            toBePrinted = Indexer.searchEntityNominative("\"" + s + "\"", "index/dictionary_nominatives", 1);
+            if (toBePrinted.size() != 0){
+                System.out.print(toBePrinted.get(0) + " - ");
+                System.out.println(toBePrinted.get(1));
+            }
+        }
+        for (String s : twoWord) {
+            toBePrinted = Indexer.searchEntityNominative("\"" + s + "\"", "index/dictionary_nominatives", 1);
+            if (toBePrinted.size() != 0){
+                System.out.print(toBePrinted.get(0) + " - ");
+                System.out.println(toBePrinted.get(1));
+            }
+        }
+        for (String s : threeWord) {
+            toBePrinted = Indexer.searchEntityNominative("\"" + s + "\"", "index/dictionary_nominatives", 1);
+            if (toBePrinted.size() != 0){
+                System.out.print(toBePrinted.get(0) + " - ");
+                System.out.println(toBePrinted.get(1));
+            }
+        }
+
 
     }
 
@@ -173,15 +170,16 @@ public class ArticleProcessing {
     }
 
     public static String extract_text(FileInputStream file) throws IOException {
-        Pattern pattern;
-        Matcher matcher;
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(file));
 
         String text = "";
 
         String line = reader.readLine();
         while (line != null) {
-            text += line;
+            if (!line.equals("")) {
+                text += line + "\n";
+            }
             line = reader.readLine();
         }
 

@@ -51,9 +51,11 @@ public class ParserCategories {
             output = new PrintStream(new FileOutputStream("output/outputBFS.txt"));
         }
 
+        Indexer.indexCategoriesTree();
+
         categoriesArray = load_dictionary("dictionaries/dictionary_categories_new.json");
 
-        // cca 9707.585 sec
+        // cca 9707.585 sec (line by line approach) cca 370 sec indexed
         // execution time counter
         long startTime = System.currentTimeMillis();
 
@@ -80,30 +82,37 @@ public class ParserCategories {
                 // if article is some kind of list is marked as non-entity / removed
                 if (title.matches("^Zoznam.*")) {
                     searched = true;
-                    //output.println(title + " - non-entity");
+                    output.println(title + " [non-entity]");
                 }
                 // if title is specific day in calendar
                 else if (title.matches("^[0-3]*[0-9][.][\\s]*(((janu|febru)ár|marec|apríl|máj|jún|júl|august)(a)?|(septem|októ|novem|decem)(ber|bra))$")) {
                     searched = true;
-                    //output.println(title + " - time (day)");
+                    output.println(title + " [time (day)]");
                 }
                 // if title is year or any kind of number
                 else if (title.matches("^([\\d\\s]+)([\\s]pred[\\s]Kr.)?$")) {
                     searched = true;
-                    //output.println(title + " - time (year)");
+                    output.println(title + " [time (year)]");
                 }
                 // if title is century
-                else if (title.matches("^(([0-9]*[0-9][.][\\s]roky[\\s])?[0-9]*[0-9][.][\\s]storoč(ie|ia|í)[\\s](pred[\\s]Kr([.]|istom))?)$")) {
+                else if (title.matches("^(([0-9]*[0-9][.][\\s]roky[\\s])?[0-9]*[0-9][.][\\s]storoč(ie|ia|í)[\\s]*(pred[\\s]Kr([.]|istom))?)$")) {
                     searched = true;
-                    //output.println(title + " - time (century)");
+                    output.println(title + " [time (century)]");
+                }
+                // if title is millennium
+                else if (title.matches("^([0-9]*[0-9][.][\\s]tisícroč(ie|ia|í)[\\s]*(pred[\\s]Kr([.]|istom))?)$")) {
+                    searched = true;
+                    output.println(title + " [time (millennium)]");
                 }
                 // if title is .xx (country domain)
                 else if (title.matches("^[.][\\S]{2}$")) {
                     searched = true;
+                    output.println(title + " - [miscellaneous]");
                 }
                 //if title is letter or some kind of mark
                 else if (title.matches("^[\\S]$")) {
                     searched = true;
+                    output.println(title + " - [non-entity]");
                 }
                 // if title is month
                 else if (title.matches("^((Janu|Febru)ár|Marec|Apríl|Máj|Jún|Júl|August|(Septem|Októ|Novem|Decem)ber)$")) {
@@ -116,8 +125,6 @@ public class ParserCategories {
                     output.println(title + " [time (day)]");
                 }
 
-
-
                 if (!searched) {
                     do {
                         line = bufReader.readLine();
@@ -128,7 +135,6 @@ public class ParserCategories {
                             while (matcher.find()) {
                                 redirectTitle = matcher.group(1);
                             }
-
                             searched = true;
                             output.println(title + " [redirect] {" + redirectTitle + "}");
                             break;
@@ -139,8 +145,8 @@ public class ParserCategories {
                             break;
                         }
                         // finally if article is not redirect or disambiguation it collects all categories
-                        if (line.matches("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|])?([\\s\\]]*)(</text>)?")) {
-                            pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]]).*");
+                        if (line.matches("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|][^]]*)?([\\s\\]]*)(</text>)?")) {
+                            pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]])");
                             matcher = pattern.matcher(line);
 
                             while (matcher.find()) {

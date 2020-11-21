@@ -2,11 +2,11 @@
 out
 .DS_Store
 Projekt.iml
-files/skwiki.xml
 /out/
 /sorted/
-/files/new.xml
-/files/text.txt
+/files/
 /output/
 /index/
 /lucene-8.7-2.0/
+/comparison/
+/lemmatizer/

@@ -12,9 +12,7 @@ import org.apache.lucene.store.*;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +42,8 @@ public class Indexer {
         // directory where index files are stored
         String indexPath = "index/categories";
         try {
+            long start = System.currentTimeMillis();
+
             System.out.println("Creating index in directory '" + indexPath + "'...");
             Directory dir = FSDirectory.open(Paths.get(indexPath));
             Analyzer analyzer = new StandardAnalyzer();
@@ -72,6 +72,8 @@ public class Indexer {
                     writer.addDocument(doc);
                 }
             }
+            System.out.println("Categories indexed in: " + (float)(System.currentTimeMillis() - start)/1000 + " sec");
+
             writer.close();
             file.close();
             reader.close();
@@ -107,13 +109,13 @@ public class Indexer {
         return categories;
     }
 
-    public static void indexEntityDictionary() throws IOException {
-        FileInputStream file = new FileInputStream("output/outputBFS.txt");
+    public static void indexEntityDictionary(String inputFile, String indexPath) throws IOException {
+        FileInputStream file = new FileInputStream(inputFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(file));
 
-        // directory where index files are stored
-        String indexPath = "index/dictionary";
         try {
+            long start = System.currentTimeMillis();
+
             System.out.println("Indexing to directory '" + indexPath + "'...");
             Directory dir = FSDirectory.open(Paths.get(indexPath));
             Analyzer analyzer = new StandardAnalyzer();
@@ -136,53 +138,140 @@ public class Indexer {
                     entity = matcher.group(1);
                     category = matcher.group(2);
                 }
-                //ArrayList<Object> someList = new ArrayList<>();
-                //someList.add(category);
 
                 doc.add(new TextField("entity", entity.toLowerCase(), Field.Store.YES));
                 doc.add(new TextField("category", category, Field.Store.YES));
-                //doc.add(new StoredField("categoryString", serialize(category)));
                 writer.addDocument(doc);
                 line = reader.readLine();
             }
+            System.out.println("Entities indexed in: " + (float)(System.currentTimeMillis() - start)/1000 + " sec");
 
             writer.close();
+            file.close();
+            reader.close();
         } catch (IOException e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
         }
     }
 
-    public static String searchEntityDictionary(String word) {
-        String index = "index/dictionary";
-        String category = null;
+    public static ArrayList<String> searchEntityDictionary(String word, String indexPath, int matches) {
+        ArrayList<String> categories = new ArrayList<>();
         try {
-            IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
+            IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
             IndexSearcher searcher = new IndexSearcher(reader);
             Analyzer analyzer = new StandardAnalyzer();
 
             QueryParser parser = new QueryParser("entity", analyzer);
-
             Query query = parser.parse(word);
 
-            TopDocs results = searcher.search(query, 1);
+            TopDocs results = searcher.search(query, matches);
             ScoreDoc[] hits = results.scoreDocs;
-
 
             for (ScoreDoc scoreDoc : hits) {
                 Document doc = searcher.doc(scoreDoc.doc);
-                category = doc.get("category");
+                categories.add(doc.get("category"));
             }
 
             reader.close();
         } catch (Exception e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
         }
-        return category;
+        return categories;
+    }
+
+    public static void indexEntityNominative(String inputFile, String indexPath) throws IOException{
+        FileInputStream file = new FileInputStream(inputFile);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+
+        try {
+            long start = System.currentTimeMillis();
+
+            System.out.println("Indexing to directory '" + indexPath + "'...");
+            Directory dir = FSDirectory.open(Paths.get(indexPath));
+            Analyzer analyzer = new StandardAnalyzer();
+            IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+
+            iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+
+            IndexWriter writer = new IndexWriter(dir, iwc);
+
+            String line = reader.readLine();
+            Pattern pattern;
+            Matcher matcher;
+            String entity = "";
+            String category = "";
+            while (line != null) {
+                Document doc = new Document();
+                pattern = Pattern.compile("(.*)[\\s]+\\[(.*)]");
+                matcher = pattern.matcher(line);
+                while (matcher.find()) {
+                    entity = matcher.group(1);
+                    category = matcher.group(2);
+                }
+                String completeEntity = "";
+                String[] split = entity.split(" ");
+                for (String s : split) {
+                    if (!s.contains("(") && (!s.contains(")"))) {
+                        s = s.replaceAll("\\\\", "\\\\\\");
+                        s = s.replaceAll("!", "\\\\!");
+                        s = s.replaceAll(":", "\\\\:");
+                        s = s.replaceAll(" - ", "\\\\-");
+                        s = s.replaceAll("\\+", "\\\\+");
+
+                        String result = Lemmatizer.searchLemma("\"" + s + "\"")[0];
+                        completeEntity += ((!result.isEmpty()) ? result : s.toLowerCase()) + " ";
+                    }
+                }
+
+                doc.add(new TextField("entityNominative", completeEntity, Field.Store.YES));
+                doc.add(new TextField("entity", entity, Field.Store.YES));
+                doc.add(new TextField("category", category, Field.Store.YES));
+                writer.addDocument(doc);
+
+                line = reader.readLine();
+            }
+            System.out.println("Entities indexed in: " + (float)(System.currentTimeMillis() - start)/1000 + " sec");
+
+            writer.close();
+            file.close();
+            reader.close();
+        } catch (IOException e) {
+            System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
+        }
+    }
+
+    public static ArrayList<String> searchEntityNominative(String word, String indexPath, int matches) {
+        ArrayList<String> entity = new ArrayList<>();
+        try {
+            IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
+            IndexSearcher searcher = new IndexSearcher(reader);
+            Analyzer analyzer = new StandardAnalyzer();
+
+            QueryParser parser = new QueryParser("entityNominative", analyzer);
+            Query query = parser.parse(word);
+
+            TopDocs results = searcher.search(query, matches);
+            ScoreDoc[] hits = results.scoreDocs;
+
+
+            for (ScoreDoc scoreDoc : hits) {
+                Document doc = searcher.doc(scoreDoc.doc);
+                entity.add(doc.get("entity"));
+                entity.add(doc.get("category"));
+            }
+
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
+        }
+        return entity;
     }
 
     public static void main(String[] args) throws IOException {
-        indexEntityDictionary();
-        searchEntityDictionary("Bologna");
+        indexEntityNominative("files/filteredDictionary.txt", "index/dictionary_nominatives");
+        //indexWordsDictionary();
+        //searchWordsDictionary("Slovenská");
+        //searchEntityDictionary("Bologna");
     }
 
 

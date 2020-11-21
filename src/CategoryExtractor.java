@@ -14,8 +14,8 @@ public class CategoryExtractor {
         file = new FileInputStream("files/skwiki.xml");
         bufReader = new BufferedReader(new InputStreamReader(file));
         categories = new PrintStream(new FileOutputStream("files/categories.txt"));
-        System.setOut(categories);
 
+        long start = System.currentTimeMillis();
 
         String line = bufReader.readLine();
         //reads file line by line until end
@@ -26,7 +26,7 @@ public class CategoryExtractor {
                 while (matcher.find()) {
                     categories.println("NAME: " + matcher.group(1).replaceAll(" ", " "));
                 }
-                while (!line.matches("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*") && !line.matches(".*</text.*>.*")) {
+                while (!line.matches(".*<text.*")) {
                     line = bufReader.readLine();
                 }
                 while (!line.matches(".*</text.*>.*")) {
@@ -38,17 +38,18 @@ public class CategoryExtractor {
                         }
                         line = bufReader.readLine();
                 }
-                if (line.matches("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*")) {
-                    pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
-                    matcher = pattern.matcher(line);
+                pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
+                matcher = pattern.matcher(line);
 
-                    while (matcher.find()) {
-                        categories.println(matcher.group(1).replaceAll(" ", " "));
-                    }
+                while (matcher.find()) {
+                    categories.println(matcher.group(1).replaceAll(" ", " "));
                 }
+
             }
             line = bufReader.readLine();
         }
+        System.out.println("Categories extracted in: " + (float)(System.currentTimeMillis() - start)/1000 + " sec");
+
     }
 
 }
