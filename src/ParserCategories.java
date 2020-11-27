@@ -14,35 +14,38 @@ public class ParserCategories {
     public static PrintStream output;
 
 
-    final static String searchMethod = "BFS";
     public static int maxDepth = 2;
     public static String title = "";
 
 
-    public static JSONArray load_dictionary(String name) {
+    /**
+     * This method loads and stores dictionary JSON from given file
+     * @param path - path for given JSON file
+     * @return - JSONArray of parsed JSON file
+     */
+    public static JSONArray load_dictionary(String path) {
         JSONParser parser = new JSONParser();
         JSONArray categoriesArray = null;
         try {
-            categoriesArray = (JSONArray) parser.parse(new FileReader(name));
+            categoriesArray = (JSONArray) parser.parse(new FileReader(path));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return categoriesArray;
     }
 
-    public static void main(String[] args) throws IOException {
-        FileInputStream file;
-        BufferedReader bufReader;
-        Pattern pattern;
-        Matcher matcher;
+
+
+    public static void extractEntities(String searchMethod) throws IOException {
+
         ArrayList<String> categories;
         int depth = 0;
         boolean found;
         boolean searched;
         String redirectTitle = null;
 
-        file = new FileInputStream("files/skwiki.xml");
-        bufReader = new BufferedReader(new InputStreamReader(file));
+        FileInputStream file = new FileInputStream("files/skwiki.xml");
+        BufferedReader bufReader = new BufferedReader(new InputStreamReader(file));
 
         if (searchMethod.equals("DFS")) {
             output = new PrintStream(new FileOutputStream("output/outputDFS.txt"));
@@ -51,13 +54,13 @@ public class ParserCategories {
             output = new PrintStream(new FileOutputStream("output/outputBFS.txt"));
         }
 
-        Indexer.indexCategoriesTree();
 
         categoriesArray = load_dictionary("dictionaries/dictionary_categories_new.json");
 
         // cca 9707.585 sec (line by line approach) cca 370 sec indexed
         // execution time counter
         long startTime = System.currentTimeMillis();
+        System.out.println("Extracting named entities...");
 
         String line = bufReader.readLine();
         //reads file line by line until end
@@ -72,8 +75,8 @@ public class ParserCategories {
             searched = false; // means that the page has not been searched yet
             if (line.matches(".*<title>.*</title>.*")) {
                 categories = new ArrayList<>();
-                pattern = Pattern.compile(".*<title>(.*)</title>.*");
-                matcher = pattern.matcher(line);
+                Pattern pattern = Pattern.compile(".*<title>(.*)</title>.*");
+                Matcher matcher = pattern.matcher(line);
 
                 while (matcher.find()) {
                     title = matcher.group(1);
@@ -107,12 +110,12 @@ public class ParserCategories {
                 // if title is .xx (country domain)
                 else if (title.matches("^[.][\\S]{2}$")) {
                     searched = true;
-                    output.println(title + " - [miscellaneous]");
+                    output.println(title + " [miscellaneous]");
                 }
                 //if title is letter or some kind of mark
                 else if (title.matches("^[\\S]$")) {
                     searched = true;
-                    output.println(title + " - [non-entity]");
+                    output.println(title + " [non-entity]");
                 }
                 // if title is month
                 else if (title.matches("^((Janu|Febru)ár|Marec|Apríl|Máj|Jún|Júl|August|(Septem|Októ|Novem|Decem)ber)$")) {
@@ -142,6 +145,7 @@ public class ParserCategories {
                         // if article is disambiguation page it marks as disambiguation
                         if (line.matches(".*\\{\\{[Rr]ozlišovacia stránka}}.*")) {
                             searched = true;
+                            output.println(title + " [disambiguation]");
                             break;
                         }
                         // finally if article is not redirect or disambiguation it collects all categories
@@ -205,7 +209,7 @@ public class ParserCategories {
             }
             line = bufReader.readLine();
         }
-        System.out.println((float)(System.currentTimeMillis() - startTime)/1000 + " sec");
+        System.out.println("Entities categorized in: " + (float)(System.currentTimeMillis() - startTime)/1000 + " sec");
 
     }
 
@@ -213,11 +217,15 @@ public class ParserCategories {
     public static String selectedSubCategory;
     public static ArrayList<String> queue;
 
-
+    /**
+     * This method recursively searches categories and prints labeled entities into text file
+     * @param category - category to search recursively
+     * @param depth - aktual depth of recursion
+     * @return - boolean (found matching category or not)
+     */
     private static boolean search_categories_DFS(String category, int depth) throws IOException {
 
-        String searchedCategory = category.replaceAll("[ \\s]+", " ");
-        searchedCategory = searchedCategory.replaceAll(" ", " && ");
+        String searchedCategory = "\"" + category.replaceAll("[ \\s]+", " ") + "\"";
         ArrayList<String> categoriesArray = Indexer.searchCategoriesTree(searchedCategory);
 
         if (depth == maxDepth || categoriesArray == null) {
@@ -238,6 +246,12 @@ public class ParserCategories {
         return false;
     }
 
+    /**
+     * This method recursively searches categories and prints labeled entities into text file
+     * @param category - category to search recursively
+     * @param depth - aktual depth of recursion
+     * @return - boolean (found matching category or not)
+     */
     private static boolean search_categories_BFS(String category, int depth) {
 
         ArrayList<String> queue = new ArrayList<>();
@@ -267,6 +281,11 @@ public class ParserCategories {
         return false;
     }
 
+    /**
+     * This method looks for match of the word in JSON dictionary with given string
+     * @param string -
+     * @return
+     */
     private static boolean check_category(String string) {
         Pattern pattern;
         Matcher matcher;

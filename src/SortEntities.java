@@ -57,8 +57,8 @@ public class SortEntities {
             wordRedirectTo = "\"" + wordRedirectTo.replaceAll("[ \\s]+", " ") + "\"";
 
             String category = null;
-            if (!Indexer.searchEntityDictionary(wordRedirectTo, "index/dictionary_with_redirects", 1).isEmpty()) {
-                category = Indexer.searchEntityDictionary(wordRedirectTo, "index/dictionary_with_redirects", 1).get(0);
+            if (!Indexer.searchEntityDictionary(wordRedirectTo, "index/dictionary_with_redirects", 3).isEmpty()) {
+                category = Indexer.searchEntityDictionary(wordRedirectTo, "index/dictionary_with_redirects", 3).get(0);
             }
 
             outputFile.println(wordRedirectFrom + " [" + category + "]");
@@ -90,6 +90,8 @@ public class SortEntities {
         }
         line = readerInput2.readLine();
         while (line != null) {
+            // if did not catch and assign all redirects remove leftover
+            if (!line.matches(".*\\[redirect].*"))
             outputFile.println(line);
             line = readerInput2.readLine();
         }
@@ -111,7 +113,15 @@ public class SortEntities {
         long startTime = System.currentTimeMillis();
         String line = readerInput.readLine();
         while (line != null) {
-            if (!line.matches(".*\\[(unknown|non-entity|time \\(.*\\))].*")) {
+            String[] split = line.split(" ");
+            int numberOfWords = 0;
+            for (String value : split) {
+                if (!value.contains("[") && !value.contains("]")){
+                    numberOfWords++;
+                }
+            }
+
+            if (!line.matches(".*\\[(unknown|disambiguation|non-entity|null|time \\(.*\\))].*") && numberOfWords < 5) {
                 outputFile.println(line);
             }
             line = readerInput.readLine();
@@ -121,15 +131,4 @@ public class SortEntities {
 
     }
 
-    public static void main(String[] args) throws IOException {
-
-//        Indexer.indexEntityDictionary("output/outputBFS.txt", "index/dictionary_with_redirects");
-//
-//        splitDictionary("output/outputBFS.txt", "sorted/noredirects.txt", "sorted/redirects.txt");
-//        findRedirectCategories("sorted/redirects.txt", "sorted/redirectsMatched.txt");
-//        mergeCompleteDictionaries("sorted/noredirects.txt", "sorted/redirectsMatched.txt", "files/namedEntityDictionary.txt");
-        filterDictionary("files/namedEntityDictionary.txt", "files/filteredDictionary.txt");
-
-        Indexer.indexEntityDictionary("files/filteredDictionary.txt", "index/dictionary_complete");
-    }
 }

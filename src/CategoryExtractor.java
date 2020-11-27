@@ -4,25 +4,20 @@ import java.util.regex.Pattern;
 
 public class CategoryExtractor {
 
-    public static void main(String[] args) throws IOException {
-        FileInputStream file;
-        BufferedReader bufReader;
-        Pattern pattern;
-        Matcher matcher;
-        PrintStream categories;
-
-        file = new FileInputStream("files/skwiki.xml");
-        bufReader = new BufferedReader(new InputStreamReader(file));
-        categories = new PrintStream(new FileOutputStream("files/categories.txt"));
+    public static void extractCategories() throws IOException {
+        FileInputStream file = new FileInputStream("files/skwiki.xml");
+        BufferedReader bufReader = new BufferedReader(new InputStreamReader(file));
+        PrintStream categories = new PrintStream(new FileOutputStream("files/categories.txt"));
 
         long start = System.currentTimeMillis();
+        System.out.println("Extracting categories...");
 
         String line = bufReader.readLine();
         //reads file line by line until end
         while (!line.matches(".*</mediawiki>.*")) {
             if (line.matches(".*<title>.*Kategória:.*</title>.*")) {
-                pattern = Pattern.compile(".*<title>Kategória:(.*)</title>.*");
-                matcher = pattern.matcher(line);
+                Pattern pattern = Pattern.compile(".*<title>Kategória:(.*)</title>.*");
+                Matcher matcher = pattern.matcher(line);
                 while (matcher.find()) {
                     categories.println("NAME: " + matcher.group(1).replaceAll(" ", " "));
                 }

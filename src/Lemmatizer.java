@@ -83,15 +83,17 @@ public class Lemmatizer {
 
             Query query = parser.parse(word);
 
-            TopDocs results = searcher.search(query, 1);
+            TopDocs results = searcher.search(query, 2);
             ScoreDoc[] hits = results.scoreDocs;
 
             for (ScoreDoc scoreDoc : hits) {
                 Document doc = searcher.doc(scoreDoc.doc);
                 wordBase = doc.get("wordBase");
                 wordClass = doc.get("wordClass");
+                if (hits.length > 1 ) {
+                    if (word.charAt(0) == wordBase.charAt(0)) break;
+                }
             }
-
             reader.close();
         } catch (Exception e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());

@@ -138,7 +138,6 @@ public class Indexer {
                     entity = matcher.group(1);
                     category = matcher.group(2);
                 }
-
                 doc.add(new TextField("entity", entity.toLowerCase(), Field.Store.YES));
                 doc.add(new TextField("category", category, Field.Store.YES));
                 writer.addDocument(doc);
@@ -156,6 +155,7 @@ public class Indexer {
 
     public static ArrayList<String> searchEntityDictionary(String word, String indexPath, int matches) {
         ArrayList<String> categories = new ArrayList<>();
+        ArrayList<String> oneCategory = new ArrayList<>();
         try {
             IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
             IndexSearcher searcher = new IndexSearcher(reader);
@@ -171,7 +171,12 @@ public class Indexer {
                 Document doc = searcher.doc(scoreDoc.doc);
                 categories.add(doc.get("category"));
             }
-
+            for (String category: categories) {
+                if (category.equals(word)) {
+                    oneCategory.add(category);
+                    return oneCategory;
+                }
+            }
             reader.close();
         } catch (Exception e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
@@ -217,12 +222,19 @@ public class Indexer {
                         s = s.replaceAll(":", "\\\\:");
                         s = s.replaceAll(" - ", "\\\\-");
                         s = s.replaceAll("\\+", "\\\\+");
-
-                        String result = Lemmatizer.searchLemma("\"" + s + "\"")[0];
-                        completeEntity += ((!result.isEmpty()) ? result : s.toLowerCase()) + " ";
+                        s = s.replaceAll("\\.", "");
+                        if (s.matches("[^-]*-[^-]*")) {
+                            String[] string = s.split("-");
+                            for (String str : string) {
+                                String result = Lemmatizer.searchLemma("\"" + str + "\"")[0];
+                                completeEntity += ((!result.isEmpty()) ? result : str.toLowerCase()) + " ";
+                            }
+                        } else {
+                            String result = Lemmatizer.searchLemma("\"" + s + "\"")[0];
+                            completeEntity += ((!result.isEmpty()) ? result : s.toLowerCase()) + " ";
+                        }
                     }
                 }
-
                 doc.add(new TextField("entityNominative", completeEntity, Field.Store.YES));
                 doc.add(new TextField("entity", entity, Field.Store.YES));
                 doc.add(new TextField("category", category, Field.Store.YES));
@@ -240,8 +252,9 @@ public class Indexer {
         }
     }
 
-    public static ArrayList<String> searchEntityNominative(String word, String indexPath, int matches) {
-        ArrayList<String> entity = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> searchEntityNominative(String word, String indexPath, int matches) {
+        ArrayList<ArrayList<String>> entities = new ArrayList<>();
+
         try {
             IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
             IndexSearcher searcher = new IndexSearcher(reader);
@@ -253,28 +266,20 @@ public class Indexer {
             TopDocs results = searcher.search(query, matches);
             ScoreDoc[] hits = results.scoreDocs;
 
-
             for (ScoreDoc scoreDoc : hits) {
+                ArrayList<String> entity = new ArrayList<>();
                 Document doc = searcher.doc(scoreDoc.doc);
+
                 entity.add(doc.get("entity"));
                 entity.add(doc.get("category"));
+                entities.add(entity);
             }
-
             reader.close();
         } catch (Exception e) {
             System.out.println(" caught a " + e.getClass() + "\n with message: " + e.getMessage());
         }
-        return entity;
+        return entities;
     }
-
-    public static void main(String[] args) throws IOException {
-        indexEntityNominative("files/filteredDictionary.txt", "index/dictionary_nominatives");
-        //indexWordsDictionary();
-        //searchWordsDictionary("Slovenská");
-        //searchEntityDictionary("Bologna");
-    }
-
-
 
 
 }
