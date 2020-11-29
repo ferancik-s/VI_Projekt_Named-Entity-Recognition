@@ -25,7 +25,7 @@ public class CategoryExtractor {
                     line = bufReader.readLine();
                 }
                 while (!line.matches(".*</text.*>.*")) {
-                        pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
+                        pattern = Pattern.compile("\\[\\[[Kk]ategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
                         matcher = pattern.matcher(line);
 
                         while (matcher.find()) {
@@ -33,7 +33,7 @@ public class CategoryExtractor {
                         }
                         line = bufReader.readLine();
                 }
-                pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
+                pattern = Pattern.compile("\\[\\[[Kk]ategória:[\\s]*([A-Za-zÇ-ž0-9\\s.,()– -]*)([|\\]]).*");
                 matcher = pattern.matcher(line);
 
                 while (matcher.find()) {

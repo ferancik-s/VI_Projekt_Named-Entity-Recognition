@@ -1,0 +1,117 @@
+[
+    {
+        "name": "location",
+        "key_words": [
+            "mestá", "obce", "štáty", "krajiny","geografia", "stavby"
+        ],
+        "subcategory": [
+            {
+                "name": "town/city",
+                "key_words": [
+                    "mestá", "obce"
+                ]
+            },
+            {
+                "name": "state/country",
+                "key_words": [
+                    "štáty", "krajiny"
+                ]
+            },
+            {
+                "name": "gpe",
+                "key_words": [
+                    "geografia"
+                ]
+            },
+            {
+                "name": "facility",
+                "key_words": [
+                    "stavby"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "organization",
+        "key_words": [
+            "podniky", "skupiny", "organizácie", "spoločnosť"
+        ],
+        "subcategory": [
+            {
+                "name": "corporation",
+                "key_words": [
+                    "podniky", "spoločnosť"
+                ]
+            },
+            {
+                "name": "band",
+                "key_words": [
+                    "skupiny"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "person",
+        "key_words": [
+            "osobnosti", "ľudia"
+        ],
+        "subcategory": [
+
+        ]
+    },
+    {
+        "name": "miscellaneous",
+        "key_words": [
+            "história",  "vojny", "dejiny", "literatúra", "výrobky", "národnosti", "kultúra", "jazyk", "jazyky", "umenie", "umenia", "šport"
+        ],
+        "subcategory": [
+            {
+                "name": "event",
+                "key_words": [
+                    "história", "vojny", "dejiny"
+                ]
+            },
+            {
+                "name": "norp",
+                "key_words": [
+                    "národnosti"
+                ]
+            },
+            {
+                "name": "language",
+                "key_words": [
+                    "jazyk", "jazyky"
+                ]
+            },
+            {
+                "name": "workOfArt",
+                "key_words": [
+                    "kultúra", "literatúra", "umenie", "umenia"
+                ]
+            },
+            {
+                "name": "product",
+                "key_words": [
+                    "výrobky"
+                ]
+            },
+            {
+                "name": "sport",
+                "key_words": [
+                    "šport"
+                ]
+            }
+
+        ]
+    },
+    {
+        "name": "non-entity",
+        "key_words": [
+            "veda", "vedy", "znalosti", "zoznamy", "symboly"
+        ],
+        "subcategory": [
+
+        ]
+    }
+]

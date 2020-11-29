@@ -25,7 +25,7 @@ public class ArticleProcessing {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-
+    public static final String dictionary = "dictionary_nominatives_DFS";
 
 
     public static void main(String[] args) throws IOException {
@@ -80,6 +80,10 @@ public class ArticleProcessing {
                     temp.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1));
                     twoWord.add(found[0] + " " + found1[0]);
                 }
+                else if (found[1].matches(ADJECTIVE) && Character.isUpperCase(nouns_adjectives.get(i + 1).charAt(0))){
+                    temp.add(nouns_adjectives.get(i) + " " + nouns_adjectives.get(i+1));
+                    twoWord.add(found[0] + " " + nouns_adjectives.get(i+1));
+                }
                 // if first and second word stars with capital letter
                 // e.g. "Isaac Newton"
                 else if (Character.isUpperCase(nouns_adjectives.get(i).charAt(0)) && Character.isUpperCase(nouns_adjectives.get(i + 1).charAt(0))) {
@@ -106,7 +110,7 @@ public class ArticleProcessing {
                 }
                 // if first word is number, second is adjective and third is noun (we assume that number has to be followed with "." so it adds to it
                 // e.g. "2. svetová vojna"
-                if ((nouns_adjectives.get(i).matches("[0-9]*")) && found1[1].matches(ADJECTIVE) && found2[1].matches(NOUN)){
+                else if ((nouns_adjectives.get(i).matches("[0-9]*")) && found1[1].matches(ADJECTIVE) && found2[1].matches(NOUN)){
                     temp.add(nouns_adjectives.get(i) + ". " + nouns_adjectives.get(i + 1) + " " + nouns_adjectives.get(i + 2));
                     threeWord.add(nouns_adjectives.get(i) + ". " + found1[0] + " " + found2[0]);
                 }
@@ -151,7 +155,7 @@ public class ArticleProcessing {
         ArrayList<String> nouns_adjectives = new ArrayList<>();
         for (String item : allWords) {
             if (!item.matches("[.,?:]")){
-                String[] found = Lemmatizer.searchLemma(item.replaceAll("[,.;:?!()\"]", ""));
+                String[] found = Lemmatizer.searchLemma(item.replaceAll("[,.;:?!()\"/]", ""));
 
                 if (found[1].matches("([SA][SAFU]|Q)") || Character.isUpperCase(item.charAt(0)) || item.matches("[0-9]*[.]")) {
                     nouns_adjectives.add(item.replaceAll("[,.;:?!()\"]", ""));
@@ -179,23 +183,25 @@ public class ArticleProcessing {
                     else if (word.charAt(1) == '2') sub = "state/country";
                     else if (word.charAt(1) == '3') sub = "gpe";
                     else if (word.charAt(1) == '4') sub = "facility";
-                    System.out.print(ANSI_GREEN + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "") + " [location - "+ sub +"]" + ANSI_RESET);
+                    System.out.print(ANSI_GREEN + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "").replaceAll("\\(AND\\)", " ") + " [location - "+ sub +"]" + ANSI_RESET);
                 } else if (word.charAt(0) == '2') {
                     if (word.charAt(1) == '1') sub = "";
                     else if (word.charAt(1) == '2') sub = " - corporation";
                     else if (word.charAt(1) == '3') sub = " - band";
-                    System.out.print(ANSI_BLUE + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "") + " [organization"+ sub +"]" + ANSI_RESET);
+                    System.out.print(ANSI_BLUE + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "").replaceAll("\\(AND\\)", " ") + " [organization"+ sub +"]" + ANSI_RESET);
                 } else if (word.charAt(0) == '3') {
-                    System.out.print(ANSI_RED + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "") + " [person - "+ sub +"]" + ANSI_RESET);
+                    System.out.print(ANSI_RED + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "").replaceAll("\\(AND\\)", " ") + " [person]" + ANSI_RESET);
                 } else if (word.charAt(0) == '4') {
                     if (word.charAt(1) == '1') sub = "event";
                     else if (word.charAt(1) == '2') sub = "norp";
                     else if (word.charAt(1) == '3') sub = "language";
                     else if (word.charAt(1) == '4') sub = "workOfArt";
                     else if (word.charAt(1) == '5') sub = "product";
-                    System.out.print(ANSI_PURPLE + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "") + " [miscellaneous - "+ sub +"]" + ANSI_RESET);
+                    else if (word.charAt(1) == '6') sub = "sport";
+                    System.out.print(ANSI_PURPLE + word.replaceAll(word.charAt(0) + "" + word.charAt(1), "").replaceAll("\\(AND\\)", " ") + " [miscellaneous - "+ sub +"]" + ANSI_RESET);
                 } else System.out.print(word);
             } else System.out.print(word);
+            sub = "";
         }
     }
 
@@ -234,11 +240,23 @@ public class ArticleProcessing {
                                 case "(language)" -> mark = "43";
                                 case "(workOfArt)" -> mark = "44";
                                 case "(product)" -> mark = "45";
+                                case "(sport)" -> mark = "46";
                             }
                         }
                     }
                 }
-                text = text.replaceAll( matcher.group(1).replaceAll("\\(", "\\\\(") + matcher.group(2) + matcher.group(3).replaceAll("\\)", "\\\\)"),  matcher.group(1) + "[" + mark + matcher.group(2) + mark + "]" + matcher.group(3));
+                String before = matcher.group(1).replaceAll("\\(", "\\\\(").replaceAll("\\?", "\\\\?");
+                String after = matcher.group(3).replaceAll("\\)", "\\\\)");
+                String[] words = matcher.group(2).split(" ");
+                String bondWord = "";
+                for (int i = 0; i < words.length - 1 ; i++) {
+                    bondWord += words[i] + "(AND)";
+                }
+                bondWord += words[words.length - 1];
+
+
+
+                text = text.replaceAll( before + matcher.group(2) + after,  matcher.group(1) + "[" + mark + bondWord + mark + "]" + matcher.group(3));
             }
         }
         return text;
@@ -246,7 +264,7 @@ public class ArticleProcessing {
 
     public static ArrayList<ArrayList<String>> assign_categories(ArrayList<String> nWord, ArrayList<ArrayList<String>>  nWordOriginal, int numberOfMatches) {
         for (int i = 0; i < nWord.size(); i++) {
-            ArrayList<ArrayList<String>> toBePrinted = Indexer.searchEntityNominative("\"" + nWord.get(i) + "\"", "index/dictionary_nominatives", numberOfMatches);
+            ArrayList<ArrayList<String>> toBePrinted = Indexer.searchEntityNominative("\"" + nWord.get(i) + "\"", "index/" + dictionary, numberOfMatches);
             for (ArrayList<String> array : toBePrinted) {
                 nWordOriginal.get(i).add((array.get(1)));
             }

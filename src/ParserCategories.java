@@ -149,8 +149,8 @@ public class ParserCategories {
                             break;
                         }
                         // finally if article is not redirect or disambiguation it collects all categories
-                        if (line.matches("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|][^]]*)?([\\s\\]]*)(</text>)?")) {
-                            pattern = Pattern.compile("\\[\\[Kategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]])");
+                        if (line.matches("\\[\\[[Kk]ategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|][^]]*)?([\\s\\]]*)(</text>)?")) {
+                            pattern = Pattern.compile("\\[\\[[Kk]ategória:[\\s]*([ÁA-Za-zÇ-ž0-9\\s,.()– -]*)([|\\]])");
                             matcher = pattern.matcher(line);
 
                             while (matcher.find()) {
